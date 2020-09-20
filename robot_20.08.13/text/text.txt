@@ -1,0 +1,132 @@
+	宁工逮虾户队———程序说明
+成员:电气
+	 电气172
+	 电气
+引脚接线:
+	LED指示灯:
+		LED1:(GPIOG,GPIO_Pin_14)
+
+	按键:
+		KEY0:(GPIOG,GPIO_Pin_10)
+		KEY1:(GPIOG,GPIO_Pin_11)
+		KEY2:(GPIOG,GPIO_Pin_12)
+		KEY3:(GPIOG,GPIO_Pin_13)
+
+	灰度:			f[0]左边 f[7]右边  b[0]右边 b[7]左边
+		前灰度:
+		A0:(GPIOF,GPIO_Pin_4)
+		A1:(GPIOF,GPIO_Pin_5)
+		A2:(GPIOF,GPIO_Pin_6)
+		HD_F:(GPIOC,GPIO_Pin_2)		ADC1_ch12
+		后灰度:
+		B0:(GPIOF,GPIO_Pin_7)
+		B1:(GPIOF,GPIO_Pin_8)
+		B2:(GPIOF,GPIO_Pin_9)
+		HD_B:(GPIOC,GPIO_Pin_3)		ADC1_ch13
+	电机驱动:
+		DIR_1:(GPIOA,GPIO_Pin_0)
+		PWM_1:(GPIOB,GPIO_Pin_0)	TIM3->CCR3 
+		DIR_2:(GPIOA,GPIO_Pin_1)
+		PWM_2:(GPIOB,GPIO_Pin_1)	TIM3->CCR4
+	MPU6050:
+		DC_TX:(GPIOB,GPIO_Pin_11)	USART3_RX
+		DC_RX:(GPIOB,GPIO_Pin_10)	USART3_TX
+	激光模块:(检测到红线:指示灯灭,返回1;检测到黑线:指示灯亮,返回0)		左激光换成红外，红外检测到红线返回0，检测到黑线返回1
+		JG_L(Laser1):(GPIOB,GPIO_Pin_12)
+		JG_R(Laser2):(GPIOB,GPIO_Pin_13)
+	红外模块:		无遮挡输出1，有遮挡输出0
+		Infrared1:(GPIOD,GPIO_Pin_10)
+		Infrared2:(GPIOD,GPIO_Pin_11)
+	OLED:
+		SCL:(GPIOD,GPIO_Pin_9)
+		SDA:(GPIOD,GPIO_Pin_8)
+	蓝牙模块(电脑棒接收模块)[当时准备想用蓝牙与上位机传输信号，现在用于电脑棒串口通信]:
+		LY_RX:(GPIOA,GPIO_Pin_2)	USART2_TX
+		LY_TX:(GPIOA,GPIO_Pin_3)	USART2_RX
+
+备注说明：
+	(1)线程中数值越大优先级越低
+	(2)JY61.c文件串口中断中不能加  USART_ClearITPendingBit(USART3,USART_IT_RXNE);和USART_ClearITPendingBit(USART3,USART_IT_ORE);
+		原因存疑
+	(3)Compass_Operation函数中
+		if(rt_mb_recv(key_value_mb, &keycode, RT_WAITING_FOREVER) == RT_EOK)
+		改成if(rt_mb_recv(key_value_mb, &keycode, 5) == RT_EOK)
+		原因存疑
+	(4)JY61.c文件中判断包头和数组赋值必须放入中断中
+		若判断在中断,赋值在while(1)中则不能输出数据
+		原因存疑
+	(5)上平台2时经常偏右
+	(6)激光过木桥时容易检测不准,需调
+		方法:改变位置高度,改变激光检测的感应器位置,改变凸面镜为平面镜,去掉外...
+	(7)激光检测时容易检测到平台下，返回的值依然是0，需注意！！！
+	(8)static rt_uint8_t map_stack[4096];		map.c文件中程序过大，堆栈值需要调高，至于调到多少为上限，未知
+	(5)转弯要慢 400
+操作说明:
+	K2：上键，K1:下键,K3:确认键,K4:退出键
+	使用GY26说明；连线与JY61不同,project工程中去除JY61.c文件(Applications文件夹中)，增加bsp_compass.c文件(Driver文件夹中)
+	使用JY61说明；连线与GY26不同,project工程中去除bsp_compass.c文件(Driver文件夹中)，增加JY61.c文件(Applications文件夹中)
+	
+电机驱动说明:
+	☆使用直流电机驱动正转过程中，应该先0（0%PWM）速100ms以上，等物流二极管续流后，再反转。
+	 这样可以避免瞬间反转导致的高压高流，击穿mos管。。。。（可不加）
+	☆PWM频率必须高于1K以上，4K-20K都可以。(一定保证)
+	☆因为驱动半桥需要自举生压，PWM占空比必须小于98%。最好在95%以下。(一定保证)
+	1、电机电源接通，中间一定要通过开关来上电，不能直接电池插入，容易产生火花产生高压，击穿板子。
+	   5V和GND各引出2路，方便2块板子组成四驱时接线。普通接一个就行。
+	2、上电顺序：可以驱动电源和右边8P接口的5V一起上电。
+	   如果测试，而且不同时上电，那么先上电+5V和GND，再上电电机电源。
+	3、5V和GND是控制器板子给驱动板供电，一定要接入。不要只接了IN1-4，没有接5V和GND。
+	   IN1和IN2控制左边的驱动，IN3和IN4控制右边的驱动。当IN1给PWM，IN2给0,即正转，当IN1给0,IN2给PWM，即反转。二边都给0，或者给反方向速度就刹车。
+	4、驱动普通功率电机，一个电机驱动端子可以并联接2个电机，这样一块驱动板可以驱动4个电机。
+	   如果接大功率擂台电机，那么最好用2块驱动板，驱动4个电机，组成四驱。
+	5、驱动板的电源GND 和5V接口的GND 为同一个地。接线时候务必小心确认这2个GND为同一个GND。以免发生GND短路。
+	
+图像识别通信协议:
+	到第二个平台需要扫码时发送a，电脑棒返回0\r\n或者1\r\n，根据01判断去3号平台或4号平台；
+	到第三个平台需要扫码时发送b，电脑棒返回0\r\n或者1\r\n，根据01判断去5号或6号平台；
+	以此同理到达456平台需要扫码时发送cde，并根据返回01信号判断去下一个平台
+	注意:串口发送接收使用的是USART2，一位停止位，8位数据，无控制流，无奇偶校验，串口发送的都是ASCII码序列号，即发送abcde时即发送97 98 99 100 101，收到时的信号为48和49
+
+电脑棒特点:
+1、有开机时间，所以比赛或者调试前要给电脑棒足够的时间来开启；
+2、不能非正常关机，即直接断电关机，所以在断电前要发送串口命令来使得电脑棒关机，等待关机后才能断电脑棒电源；
+3、由于电脑棒电源问题，所以需要给主控板独立开关控制主控板电源输入输出；
+4、装好电脑棒后耗电量增加，要一直关注电源电量，别等快没电了才换，对各个电路元器件电脑棒都不好
+比赛在即，主控板电脑棒驱动板电机等损坏后果很严重
+
+更新说明:
+2018/03/30:配置完成JY61,灰度,按键LED,电机驱动,OLED,
+2018/03/31:增添相应注释
+2018/04/02:删除GY26.c和GY26.h文件，配置bsp_compass.c和bsp_compass.h文件
+2018/04/04:灰度直线调试初步
+2018/04/07:增加转弯turn_angle()函数
+2018/04/09:按键时常失灵bug修复,原因:JY61中断中多加了return
+2018/04/13:灰度直线调试初步完成，用前后双灰度检测
+2018/04/14:修改oled.c文件中的Delay_us使用
+		(在真正使用中不能直接调用自己写的Delay_us函数，不准!)
+	操作:将下列函数放图thread.c文件中增加#include <board.h>,记得在相应h文件中进行函数声明
+		void rt_hw_us_delay(rt_uint32_t us)
+		{
+			rt_uint32_t delta;
+
+			/* 获得延时经过的tick数 */
+			us = us * (SysTick->LOAD/(1000000/RT_TICK_PER_SECOND));
+
+			/* 获得当前时间 */
+			delta = SysTick->VAL;
+
+			/* 循环获得当前时间，直到达到指定的时间后退出循环 */
+			while (delta - SysTick->VAL< us);
+		}
+2018/04/15:增加激光检测红线函数,增加灰度循迹角度检测反馈函数
+		   增加登珠峰函数，平台1至平台2程序
+2018/04/18:增加通信协议(初步函数，待检测)
+		   增加关电脑棒功能
+
+待完成:灰度控制运动
+
+
+up_mouton的入口参数需要修改
+3——5——8未测试
+
+5号平台的路线都未测试
