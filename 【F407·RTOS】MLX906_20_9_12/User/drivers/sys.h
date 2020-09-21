@@ -16,8 +16,16 @@
 //修改说明
 //无
 ////////////////////////////////////////////////////////////////////////////////// 
-
-
+#define USE_STDPERIPH_DRIVER
+#include "misc.h"
+#include "stm32f4xx_adc.h"
+#include "stm32f4xx_dcmi.h"
+#include "stm32f4xx_gpio.h"
+#include "stm32f4xx_dma.h"
+#include "stm32f4xx_spi.h"
+#include "stm32f4xx_rcc.h"
+#include "stm32f4xx_tim.h"
+#include "stm32f4xx_usart.h"
 //0,不支持ucos
 //1,支持ucos
 #define SYSTEM_SUPPORT_OS		0		//定义系统文件夹是否支持UCOS

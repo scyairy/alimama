@@ -1,0 +1,40 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "F:/MDK5/ARM/ARMCC/include",
+                "${workspaceRoot}",
+                "${workspaceRoot}/RT_Thread/include",
+                "${workspaceRoot}/User/drivers",
+                "${workspaceRoot}/User/applications",
+                "${workspaceRoot}/ST_Library/STM32F4xx_Stdperiph_Driver/inc",
+                "${workspaceRoot}/ST_Library/CMSIS/ST/STM32F4xx/include",
+                "${workspaceRoot}/RT_Thread/libcpu/arm/cortex-m4",
+                "${workspaceRoot}/RT_Thread/libcpu/arm/common",
+                "${workspaceRoot}/RT_Thread/components/drivers/include",
+                "${workspaceRoot}/ST_Library/CMSIS/Include",
+                "${workspaceRoot}/RT_Thread/components/finsh",
+                "${workspaceRoot}/RT_Thread/src",
+                "${workspaceRoot}/project"
+            ],
+            "defines": [
+                "USE_STDPERIPH_DRIVER",
+                "STM32F407xx",
+                "_DEBUG",
+                "UNICODE",
+                "__CC_ARM"
+            ],
+            "compilerPath": "F:\\VScode\\MinGW\\mingw64\\bin\\g++.exe",
+            "intelliSenseMode": "${default}",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "",
+                "path": [
+                    "${workspaceFolder}"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}
