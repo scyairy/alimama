@@ -72,7 +72,7 @@ void USART3_IRQHandler(void)
 		{
 			if(ucRxBuffer[1]==0X0A)
 			{
-				if(ucRxBuffer[7]==(u8)(0x0D+0X0A+ucRxBuffer[2]+ucRxBuffer[3]+ucRxBuffer[4]+0x2E+ucRxBuffer[6]) )
+				if(ucRxBuffer[7]==(u8)(0x0D+0X0A+ucRxBuffer[2]+ucRxBuffer[3]+ucRxBuffer[4]+0x2E +ucRxBuffer[6]) )
 				{
 					LED0=!LED0;
 					Angle=(ucRxBuffer[2]&0x0F)*100+(ucRxBuffer[3]&0x0F)*10+(ucRxBuffer[4]&0x0F);
