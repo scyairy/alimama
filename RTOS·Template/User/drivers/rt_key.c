@@ -31,7 +31,7 @@ void KEY_Init(void)
 
  
 } 
-rt_uint8_t key_value;
+//rt_uint8_t key_value;
 static vu8 s_key_debounce_count, s_key_long_count;
 vu16	t_key_code;
 static vu16 s_KeyCode;//内部检查按键使用

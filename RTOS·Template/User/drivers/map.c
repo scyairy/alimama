@@ -23,7 +23,7 @@ static void map_thread_entry(void* parameter)
 
 int rt_map_init(void)
 {
-    rt_thread_t init_thread;
+//    rt_thread_t init_thread;
 
     rt_err_t result;
 

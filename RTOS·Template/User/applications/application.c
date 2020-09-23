@@ -55,11 +55,11 @@ static void robot_hw_init(void)		//硬件初始化
 		LED_init();//LED初始化
 		oled_all();//oled初始化
 //		OLED_Clear();//oled清屏
-		motor_init();//舵机pwm
-		Adc_Init_cw();//贴片测温
-		ads1115_I2C_INIT();//贴片测温
-		Init_HX711pin();//压力传感器
-		USART3_Init(115200);//JY61串口初始化
+//		motor_init();//舵机pwm
+//		Adc_Init_cw();//贴片测温
+//		ads1115_I2C_INIT();//贴片测温
+//		Init_HX711pin();//压力传感器
+//		USART3_Init(115200);//JY61串口初始化
 }
 
 static void robot_sw_init(void)
