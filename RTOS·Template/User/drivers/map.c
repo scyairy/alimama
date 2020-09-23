@@ -16,7 +16,7 @@ static void map_thread_entry(void* parameter)
 {
 	while(1)
 	{
-		mlx906();
+        mlx906();
 	}
 
 }

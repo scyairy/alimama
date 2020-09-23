@@ -75,10 +75,6 @@ void opreation_thread_entry(void* paramete)
 		
     
 		if (rt_mb_recv(key_value_mb , &key_value , RT_WAITING_FOREVER) == RT_EOK)
-//							{
-//								
-//				if(key_value==KEY0_PRES)
-//				{
 
 //					mot(1,1);
 //          TIM_SetCounter(TIM4,0);
