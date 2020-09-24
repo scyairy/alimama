@@ -7,6 +7,7 @@
 #define LED0 PGout(14)
 
 void LED_init(void);
+void LED_Init1(void);
 
 #endif
 

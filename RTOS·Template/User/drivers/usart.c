@@ -19,7 +19,7 @@
 #include "stm32f4xx.h"
 #include "usart.h"
 #include "board.h"
-
+#include "sys.h"
 #include <rtdevice.h>
 
 /* UART GPIO define. */
@@ -656,6 +656,57 @@ static void DMA_Configuration(struct rt_serial_device *serial) {
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
+
+void uart_init(u32 pclk2,u32 bound)
+{  	 
+	float temp;
+	u16 mantissa;
+	u16 fraction;	   
+	temp=(float)(pclk2*1000000)/(bound*16);//得到USARTDIV@OVER8=0
+	mantissa=temp;				 //得到整数部分
+	fraction=(temp-mantissa)*16; //得到小数部分@OVER8=0 
+    mantissa<<=4;
+	mantissa+=fraction; 
+	RCC->AHB1ENR|=1<<0;   	//使能PORTA口时钟  
+	RCC->APB2ENR|=1<<4;  	//使能串口1时钟 
+	GPIO_Set(GPIOA,PIN9|PIN10,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);//PA9,PA10,复用功能,上拉输出
+ 	GPIO_AF_Set(GPIOA,9,7);	//PA9,AF7
+	GPIO_AF_Set(GPIOA,10,7);//PA10,AF7  	   
+	//波特率设置
+ 	USART1->BRR=mantissa; 	//波特率设置	 
+	USART1->CR1&=~(1<<15); 	//设置OVER8=0 
+	USART1->CR1|=1<<3;  	//串口发送使能 
+#if EN_USART1_RX		  	//如果使能了接收
+	//使能接收中断 
+	USART1->CR1|=1<<2;  	//串口接收使能
+	USART1->CR1|=1<<5;    	//接收缓冲区非空中断使能	    	
+	MY_NVIC_Init(3,3,USART1_IRQn,2);//组2，最低优先级 
+#endif
+	USART1->CR1|=1<<13;  	//串口使能
+}
+
+
+void usart2_init(u32 pclk1,u32 bound)
+{  	 
+	float temp;
+	u16 mantissa;
+	u16 fraction;	   
+	temp=(float)(pclk1*1000000)/(bound*16);//得到USARTDIV,OVER8设置为0
+	mantissa=temp;				 			//得到整数部分
+	fraction=(temp-mantissa)*16; 			//得到小数部分,OVER8设置为0	 
+    mantissa<<=4;
+	mantissa+=fraction; 
+	RCC->AHB1ENR|=1<<0;   					//使能PORTA口时钟  
+	RCC->APB1ENR|=1<<17;  					//使能串口2时钟 
+	GPIO_Set(GPIOA,PIN2|PIN3,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);//PA9,PA10,复用功能,上拉输出
+ 	GPIO_AF_Set(GPIOA,2,7);					//PA2,AF7
+	GPIO_AF_Set(GPIOA,3,7);		 			//PA3,AF7  	   
+	//波特率设置
+ 	USART2->BRR=mantissa; 	// 波特率设置	 
+	USART2->CR1|=1<<3;  	//串口发送使能  
+	USART2->CR1|=1<<13;  	//串口使能
+}
+
 
 int stm32_hw_usart_init(void)
 {

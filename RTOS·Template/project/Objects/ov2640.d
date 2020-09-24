@@ -37,8 +37,6 @@
 .\objects\ov2640.o: ..\ST_Library\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\objects\ov2640.o: ..\User\drivers\ov2640.h
 .\objects\ov2640.o: ..\User\drivers\sccb.h
-.\objects\ov2640.o: ..\User\drivers\ov2640cfg.h
-.\objects\ov2640.o: ..\User\applications\soft_timer.h
 .\objects\ov2640.o: ..\RT_Thread\include\rtthread.h
 .\objects\ov2640.o: .\rtconfig.h
 .\objects\ov2640.o: ..\RT_Thread\include\rtdebug.h
@@ -57,6 +55,8 @@
 .\objects\ov2640.o: ..\RT_Thread\include\rtservice.h
 .\objects\ov2640.o: ..\RT_Thread\include\rtm.h
 .\objects\ov2640.o: ..\RT_Thread\include\rtthread.h
+.\objects\ov2640.o: ..\User\drivers\ov2640cfg.h
+.\objects\ov2640.o: ..\User\applications\soft_timer.h
 .\objects\ov2640.o: ..\RT_Thread\components\finsh\finsh.h
 .\objects\ov2640.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\ov2640.o: F:\MDK5\ARM\ARMCC\Bin\..\include\ctype.h
@@ -65,3 +65,8 @@
 .\objects\ov2640.o: ..\User\drivers\delay.h
 .\objects\ov2640.o: ..\User\drivers\usart.h
 .\objects\ov2640.o: ..\RT_Thread\include\rthw.h
+.\objects\ov2640.o: ..\User\drivers\timer.h
+.\objects\ov2640.o: ..\User\drivers\rt_led.h
+.\objects\ov2640.o: ..\User\drivers\ili93xx.h
+.\objects\ov2640.o: ..\User\drivers\dcmi.h
+.\objects\ov2640.o: ..\User\drivers\rt_oled.h

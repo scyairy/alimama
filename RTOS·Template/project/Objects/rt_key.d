@@ -57,6 +57,7 @@
 .\objects\rt_key.o: ..\RT_Thread\include\rtthread.h
 .\objects\rt_key.o: ..\User\drivers\usart.h
 .\objects\rt_key.o: ..\RT_Thread\include\rthw.h
+.\objects\rt_key.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\rt_key.o: ..\User\drivers\operation.h
 .\objects\rt_key.o: ..\User\drivers\rt_oled.h
 .\objects\rt_key.o: ..\User\drivers\rt_led.h

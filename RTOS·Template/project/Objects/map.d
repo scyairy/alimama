@@ -65,3 +65,7 @@
 .\objects\map.o: F:\MDK5\ARM\ARMCC\Bin\..\include\ctype.h
 .\objects\map.o: F:\MDK5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\map.o: ..\User\drivers\mlx906.h
+.\objects\map.o: ..\User\drivers\dcmi.h
+.\objects\map.o: ..\User\drivers\ili93xx.h
+.\objects\map.o: ..\User\drivers\sccb.h
+.\objects\map.o: ..\User\drivers\ov2640.h

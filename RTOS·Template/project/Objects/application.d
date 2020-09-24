@@ -65,9 +65,14 @@
 .\objects\application.o: F:\MDK5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\application.o: ..\User\drivers\mlx906.h
 .\objects\application.o: ..\User\drivers\hx711.h
-.\objects\application.o: ..\User\drivers\JY61.h
 .\objects\application.o: ..\User\drivers\cw_adc.h
 .\objects\application.o: ..\User\drivers\rt_oled.h
 .\objects\application.o: ..\User\drivers\rt_led.h
 .\objects\application.o: ..\User\drivers\operation.h
 .\objects\application.o: ..\User\drivers\rt_pwm.h
+.\objects\application.o: ..\User\drivers\usart.h
+.\objects\application.o: ..\RT_Thread\include\rthw.h
+.\objects\application.o: ..\User\drivers\timer.h
+.\objects\application.o: ..\User\drivers\rt_key.h
+.\objects\application.o: ..\User\drivers\ov2640.h
+.\objects\application.o: ..\User\drivers\sccb.h

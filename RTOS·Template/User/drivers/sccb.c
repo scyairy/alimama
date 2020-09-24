@@ -30,9 +30,9 @@ void SCCB_Start(void)
 {
     SCCB_SDA=1;     //数据线高电平	   
     SCCB_SCL=1;	    //在时钟线高的时候数据线由高至低
-    Delay_us(50);  
+    delay_us(50);  
     SCCB_SDA=0;
-    Delay_us(50);	 
+    delay_us(50);	 
     SCCB_SCL=0;	    //数据线恢复低电平，单操作函数必要	  
 }
 
@@ -42,23 +42,23 @@ void SCCB_Start(void)
 void SCCB_Stop(void)
 {
     SCCB_SDA=0;
-    Delay_us(50);	 
+    delay_us(50);	 
     SCCB_SCL=1;	
-    Delay_us(50); 
+    delay_us(50); 
     SCCB_SDA=1;	
-    Delay_us(50);
+    delay_us(50);
 }  
 //产生NA信号
 void SCCB_No_Ack(void)
 {
-	Delay_us(50);
+	delay_us(50);
 	SCCB_SDA=1;	
 	SCCB_SCL=1;	
-	Delay_us(50);
+	delay_us(50);
 	SCCB_SCL=0;	
-	Delay_us(50);
+	delay_us(50);
 	SCCB_SDA=0;	
-	Delay_us(50);
+	delay_us(50);
 }
 //SCCB,写入一个字节
 //返回值:0,成功;1,失败. 
@@ -70,15 +70,15 @@ u8 SCCB_WR_Byte(u8 dat)
 		if(dat&0x80)SCCB_SDA=1;	
 		else SCCB_SDA=0;
 		dat<<=1;
-		Delay_us(50);
+		delay_us(50);
 		SCCB_SCL=1;	
-		Delay_us(50);
+		delay_us(50);
 		SCCB_SCL=0;		   
 	}			 
 	SCCB_SDA_IN();		//设置SDA为输入 
-	Delay_us(50);
+	delay_us(50);
 	SCCB_SCL=1;			//接收第九位,以判断是否发送成功
-	Delay_us(50);
+	delay_us(50);
 	if(SCCB_READ_SDA)res=1;  //SDA=1发送失败，返回1
 	else res=0;         //SDA=0发送成功，返回0
 	SCCB_SCL=0;		 
@@ -94,11 +94,11 @@ u8 SCCB_RD_Byte(void)
 	SCCB_SDA_IN();		//设置SDA为输入  
 	for(j=8;j>0;j--) 	//循环8次接收数据
 	{		     	  
-		Delay_us(50);
+		delay_us(50);
 		SCCB_SCL=1;
 		temp=temp<<1;
 		if(SCCB_READ_SDA)temp++;   
-		Delay_us(50);
+		delay_us(50);
 		SCCB_SCL=0;
 	}	
 	SCCB_SDA_OUT();		//设置SDA为输出    
@@ -111,9 +111,9 @@ u8 SCCB_WR_Reg(u8 reg,u8 data)
 	u8 res=0;
 	SCCB_Start(); 					//启动SCCB传输
 	if(SCCB_WR_Byte(SCCB_ID))res=1;	//写器件ID	  
-	Delay_us(100);
+	delay_us(100);
   	if(SCCB_WR_Byte(reg))res=1;		//写寄存器地址	  
-	Delay_us(100);
+	delay_us(100);
   	if(SCCB_WR_Byte(data))res=1; 	//写数据	 
   	SCCB_Stop();	  
   	return	res;
@@ -125,15 +125,15 @@ u8 SCCB_RD_Reg(u8 reg)
 	u8 val=0;
 	SCCB_Start(); 				//启动SCCB传输
 	SCCB_WR_Byte(SCCB_ID);		//写器件ID	  
-	Delay_us(100);	 
+	delay_us(100);	 
   	SCCB_WR_Byte(reg);			//写寄存器地址	  
-	Delay_us(100);	  
+	delay_us(100);	  
 	SCCB_Stop();   
-	Delay_us(100);	   
+	delay_us(100);	   
 	//设置寄存器地址后，才是读
 	SCCB_Start();
 	SCCB_WR_Byte(SCCB_ID|0X01);	//发送读命令	  
-	Delay_us(100);
+	delay_us(100);
   	val=SCCB_RD_Byte();		 	//读取数据
   	SCCB_No_Ack();
   	SCCB_Stop();

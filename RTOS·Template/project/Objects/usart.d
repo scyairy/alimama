@@ -54,6 +54,8 @@
 .\objects\usart.o: ..\RT_Thread\include\rtservice.h
 .\objects\usart.o: ..\RT_Thread\include\rtm.h
 .\objects\usart.o: ..\RT_Thread\include\rtthread.h
+.\objects\usart.o: ..\User\drivers\sys.h
+.\objects\usart.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\usart.o: ..\User\drivers\board.h
 .\objects\usart.o: ..\RT_Thread\components\drivers\include\rtdevice.h
 .\objects\usart.o: ..\RT_Thread\components\drivers\include\ipc/ringbuffer.h

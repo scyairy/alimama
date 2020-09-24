@@ -6,6 +6,11 @@
 #include "JY61.h"
 #include "soft_timer.h"
 #include "mlx906.h"
+#include "dcmi.h"
+#include "ili93xx.h"
+#include "sccb.h"
+#include "ov2640.h"
+
 
 ALIGN(RT_ALIGN_SIZE)
 static rt_uint8_t map_stack[10240];
@@ -16,7 +21,7 @@ static void map_thread_entry(void* parameter)
 {
 	while(1)
 	{
-        mlx906();
+		mlx906();
 	}
 
 }

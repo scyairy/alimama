@@ -37,7 +37,7 @@
 .\objects\ili93xx.o: ..\ST_Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\objects\ili93xx.o: ..\ST_Library\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\objects\ili93xx.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\ili93xx.o: ..\User\drivers\font_ili93.h
+.\objects\ili93xx.o: ..\User\drivers\font.h
 .\objects\ili93xx.o: ..\User\drivers\usart.h
 .\objects\ili93xx.o: ..\RT_Thread\include\rthw.h
 .\objects\ili93xx.o: ..\RT_Thread\include\rtthread.h
@@ -58,6 +58,5 @@
 .\objects\ili93xx.o: ..\RT_Thread\include\rtservice.h
 .\objects\ili93xx.o: ..\RT_Thread\include\rtm.h
 .\objects\ili93xx.o: ..\RT_Thread\include\rtthread.h
+.\objects\ili93xx.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\ili93xx.o: ..\User\drivers\delay.h
-.\objects\ili93xx.o: ..\User\applications\sys\sys_jcq.h
-.\objects\ili93xx.o: ..\User\applications\sys\stm32f4xx.h

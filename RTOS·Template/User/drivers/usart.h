@@ -17,10 +17,14 @@
 
 #include <rthw.h>
 #include <rtthread.h>
+#include "sys.h"
+#include "stdio.h"
 
 #define UART_ENABLE_IRQ(n)            NVIC_EnableIRQ((n))
 #define UART_DISABLE_IRQ(n)           NVIC_DisableIRQ((n))
 
 int stm32_hw_usart_init(void);
+void usart2_init(u32 pclk1,u32 bound); 
+void uart_init(u32 pclk2,u32 bound);
 
 #endif

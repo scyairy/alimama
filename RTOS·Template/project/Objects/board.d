@@ -55,6 +55,7 @@
 .\objects\board.o: ..\ST_Library\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\objects\board.o: ..\User\drivers\board.h
 .\objects\board.o: ..\User\drivers\usart.h
+.\objects\board.o: ..\User\drivers\sys.h
+.\objects\board.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\board.o: ..\User\drivers\gpio.h
 .\objects\board.o: ..\User\drivers\delay.h
-.\objects\board.o: ..\User\drivers\sys.h

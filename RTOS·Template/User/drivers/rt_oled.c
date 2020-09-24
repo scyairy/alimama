@@ -1,10 +1,11 @@
 #include <rtthread.h>
 #include "rt_oled.h"
 #include "stdlib.h"
-#include "font.h" 
+//#include "font.h" 
 #include "oled_font.h"
 
 struct OLED_DEVICE oled;
+u8 OLED_GRAM[128][8];	
 
 //设置SDA输出
 void SDA_OUT(void)
@@ -242,6 +243,18 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 	    }
 	}
 } 
+void OLED_DrawPoint(u8 x,u8 y,u8 t)
+{
+	u8 pos,bx,temp=0;
+	if(x>127||y>63)return;//超出范围了.
+	pos=7-y/8;
+	bx=y%8;
+	temp=1<<(7-bx);
+	if(t)OLED_GRAM[x][pos]|=temp;
+	else OLED_GRAM[x][pos]&=!temp;	
+	OLED_Set_Pos(x,63-pos);
+	OLED_WR_Byte(OLED_GRAM[x][pos],1);
+}
 
 //初始化SSD1306					    
 void oled_init(void)

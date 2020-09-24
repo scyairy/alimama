@@ -55,3 +55,5 @@
 .\objects\bsp_ads1115.o: ..\RT_Thread\include\rtservice.h
 .\objects\bsp_ads1115.o: ..\RT_Thread\include\rtm.h
 .\objects\bsp_ads1115.o: ..\RT_Thread\include\rtthread.h
+.\objects\bsp_ads1115.o: ..\User\drivers\sys.h
+.\objects\bsp_ads1115.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h

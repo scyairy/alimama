@@ -1,9 +1,9 @@
 #include "ili93xx.h"
 #include "stdlib.h"
-#include "font_ili93.h" 
+#include "font.h" 
 #include "usart.h"	 
 #include "delay.h"
-#include "sys_jcq.h"
+#include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F407开发板
@@ -122,7 +122,7 @@ void LCD_WriteReg(u16 LCD_Reg,u16 LCD_RegValue)
 u16 LCD_ReadReg(u16 LCD_Reg)
 {										   
 	LCD_WR_REG(LCD_Reg);		//写入要读的寄存器序号
-	Delay_us(5);		  
+	delay_us(5);		  
 	return LCD_RD_DATA();		//返回读到的值
 }   
 //开始写GRAM
@@ -1972,7 +1972,7 @@ void LCD_Init(void)
 		LCD_WriteReg(0x3500,0x00);
 		LCD_WriteReg(0x3A00,0x55);  //16-bit/pixel
 		LCD_WR_REG(0x1100);
-		Delay_us(120);
+		delay_us(120);
 		LCD_WR_REG(0x2900);
 	}else if(lcddev.id==0x9325)//9325
 	{
@@ -2569,7 +2569,7 @@ void LCD_Init(void)
 		LCD_WR_DATA(0x1D);		//参数1 
 		LCD_WR_DATA(0x02);		//参数2 Divider M = 2, PLL = 300/(M+1) = 100MHz
 		LCD_WR_DATA(0x04);		//参数3 Validate M and N values   
-		Delay_us(100);
+		delay_us(100);
 		LCD_WR_REG(0xE0);		// Start PLL command
 		LCD_WR_DATA(0x01);		// enable PLL
 		delay_ms(10);

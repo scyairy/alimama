@@ -55,5 +55,4 @@
 .\objects\rt_oled.o: ..\ST_Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\objects\rt_oled.o: ..\ST_Library\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\objects\rt_oled.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\rt_oled.o: ..\User\drivers\font.h
 .\objects\rt_oled.o: ..\User\drivers\oled_font.h

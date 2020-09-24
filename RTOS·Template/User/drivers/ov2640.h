@@ -2,6 +2,7 @@
 #define _OV2640_H
 #include "sys.h"
 #include "sccb.h"
+#include "rtthread.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F407开发板
@@ -124,6 +125,16 @@ void OV2640_Window_Set(u16 sx,u16 sy,u16 width,u16 height);
 u8 OV2640_OutSize_Set(u16 width,u16 height);
 u8 OV2640_ImageWin_Set(u16 offx,u16 offy,u16 width,u16 height);
 u8 OV2640_ImageSize_Set(u16 width,u16 height);
+void jpeg_data_process(void);
+u16 gray(u16 pixel);
+u16 Binary(u16 threshold,u16 pixel);
+u16 Redball(u16 threshold,u16 pixel);
+u16 Redball_x_y(u16 pixel);
+u16 yuv422_to_Gray(u16 threshold,u16 RGB565);
+u16 yuv422_y_to_bitmap(u8 threshold,u16 yuv422);
+
+int ov2640(void);//摄像头线程
+static void ov2640_entry(void *parameter);
 
 #endif
 

@@ -1,4 +1,4 @@
-#include "sys_jcq.h"
+#include "sys.h"
 #include "dcmi.h" 
 #include "lcd.h" 
 #include "rt_led.h" 
@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////// 	 
 
 u8 ov_frame=0;  						//帧率
-extern void jpeg_data_process(void);	//JPEG数据处理函数
+//extern void jpeg_data_process(void);	//JPEG数据处理函数
 //DCMI中断服务函数
 void DCMI_IRQHandler(void)
 {  
@@ -57,7 +57,7 @@ void DCMI_DMA_Init(u32 memaddr,u16 memsize,u8 memblen,u8 meminc)
 	DMA2_Stream1->CR|=1<<25;	//通道1 DCMI通道 
 } 
 //DCMI初始化
-void DCMI_Init(void)
+void DCMI_Init1(void)
 {
 	//设置IO 
 	RCC->AHB1ENR|=1<<0;		//使能外设PORTA时钟
@@ -147,6 +147,8 @@ void DCMI_CR_Set(u8 pclk,u8 hsync,u8 vsync)
 	DCMI->CR|=1<<14; 		//DCMI使能
 	DCMI->CR|=1<<0; 		//DCMI捕获使能   
 }
+
+
 
 
 
