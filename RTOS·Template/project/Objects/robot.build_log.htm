@@ -22,15 +22,98 @@ Dialog DLL:      TCM.DLL V1.36.2.0
  
 <h2>Project:</h2>
 F:\Git\workspace\alimama\RTOS¡¤Template\project\project.uvprojx
-Project File Date:  09/24/2020
+Project File Date:  09/25/2020
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\MDK5\ARM\ARMCC\Bin'
 Build target 'robot'
-compiling application.c...
+compiling ov2640.c...
+..\User\drivers\ov2640.c(675): warning:  #177-D: variable "temp"  was declared but never referenced
+  			u16 i,temp_h,temp_l,temp,gray0,gray1;
+..\User\drivers\ov2640.c(675): warning:  #177-D: variable "gray0"  was declared but never referenced
+  			u16 i,temp_h,temp_l,temp,gray0,gray1;
+..\User\drivers\ov2640.c(675): warning:  #177-D: variable "gray1"  was declared but never referenced
+  			u16 i,temp_h,temp_l,temp,gray0,gray1;
+..\User\drivers\ov2640.c(676): warning:  #177-D: variable "Graymax"  was declared but never referenced
+  			u16 Graymax=0;
+..\User\drivers\ov2640.c(677): warning:  #177-D: variable "Graymin"  was declared but never referenced
+  			u16 Graymin=65535;
+..\User\drivers\ov2640.c(627): warning:  #177-D: variable "key"  was declared but never referenced
+  	u8 key=0;
+..\User\drivers\ov2640.c(628): warning:  #177-D: variable "x"  was declared but never referenced
+  	u8 x,y,flag;
+..\User\drivers\ov2640.c(628): warning:  #177-D: variable "y"  was declared but never referenced
+  	u8 x,y,flag;
+..\User\drivers\ov2640.c(628): warning:  #177-D: variable "flag"  was declared but never referenced
+  	u8 x,y,flag;
+..\User\drivers\ov2640.c(17): warning:  #177-D: variable "fan_thread"  was declared but never referenced
+  static struct rt_thread fan_thread;
+..\User\drivers\ov2640.c(18): warning:  #177-D: variable "detach_thread"  was declared but never referenced
+  static struct rt_thread detach_thread;
+..\User\drivers\ov2640.c(20): warning:  #177-D: variable "fan_stack"  was declared but never referenced
+  static rt_uint8_t fan_stack[1024];
+..\User\drivers\ov2640.c(21): warning:  #177-D: variable "detach_stack"  was declared but never referenced
+  static rt_uint8_t detach_stack[1024];
+..\User\drivers\ov2640.c: 13 warnings, 0 errors
 linking...
-Program Size: Code=67508 RO-data=8744 RW-data=1732 ZI-data=19676  
-".\Objects\robot.axf" - 0 Error(s), 0 Warning(s).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching map.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching shell.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching operation.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching idle.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching rt_oled.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching startup_stm32f4xx.o(STACK).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching rt_oled.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching startup_stm32f4xx.o(HEAP).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_vm.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_node.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching scheduler.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching usart.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching gpio.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_var.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching object.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching kservice.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_heap.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching usart.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching libspace.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stdio_streams.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stdio_streams.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stdio_streams.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching pin.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_error.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching ov2640.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching mem.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching mem.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching scheduler.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stm32f4xx_rcc.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching timer_1.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching cpuport.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching symbol.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching ili93xx.o(.bss).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching kservice.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching thread.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_vm.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching rt_key.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching operation.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching irq.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching timer.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_compiler.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_heap.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching delay.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching mlx906.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching clock.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching idle.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching cmd.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching finsh_var.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching shell.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stdio_streams.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stdio_streams.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching stdio_streams.o(.data).
+.\Objects\robot.axf: Error: L6406E: No space in execution regions with .ANY selector matching dcmi.o(.data).
+.\Objects\robot.axf: Error: L6407E: Sections of aggregate size 0x53b0 bytes could not fit into .ANY selector(s).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 54 error messages.
+".\Objects\robot.axf" - 54 Error(s), 13 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -44,6 +127,7 @@ Package Vendor: Keil
   F:\MDK5\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
+Target not created.
 Build Time Elapsed:  00:00:02
 </pre>
 </body>

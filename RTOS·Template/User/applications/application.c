@@ -73,7 +73,7 @@ static void robot_hw_init(void)		//Ó²¼þ³õÊ¼»¯
 static void robot_sw_init(void)
 {
 		detect();
-//		ov2640();
+		ov2640();
 		rt_map_init();
 }
 

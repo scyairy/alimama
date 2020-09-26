@@ -729,7 +729,7 @@ static void ov2640_entry(void *parameter)
 //			
 				
 //			LCD_ShowNum(80,240,(u32)sum_x,8,16);
-//			LCD_ShowNum(80,160,(u32)sum_1,6,16);	
+//			LCD_ShowNum(80,160,(u32)sum_1,6,16);
 			
 		}  
 //		delay_ms(5);	  
