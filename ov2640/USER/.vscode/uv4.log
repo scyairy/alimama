@@ -1,15 +1,34 @@
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\MDK5\ARM\ARMCC\Bin'
 Build target 'OV2640'
-compiling usmart_config.c...
-compiling dcmi.c...
+compiling pwm.c...
+compiling timer.c...
+..\HARDWARE\TIMER\timer.h(19): warning:  #1-D: last line of file ends without a newline
+   
+..\HARDWARE\TIMER\timer.c: 1 warning, 0 errors
 compiling main.c...
-main.c(153): warning:  #177-D: variable "led0pwmval"  was declared but never referenced
+..\HARDWARE\TIMER\timer.h(19): warning:  #1-D: last line of file ends without a newline
+   
+main.c(192): warning:  #177-D: variable "temp"  was declared but never referenced
+  			u16 i,temp_h,temp_l,temp,gray0,gray1;
+main.c(192): warning:  #177-D: variable "gray0"  was declared but never referenced
+  			u16 i,temp_h,temp_l,temp,gray0,gray1;
+main.c(192): warning:  #177-D: variable "gray1"  was declared but never referenced
+  			u16 i,temp_h,temp_l,temp,gray0,gray1;
+main.c(193): warning:  #177-D: variable "Graymax"  was declared but never referenced
+  			u16 Graymax=0;
+main.c(194): warning:  #177-D: variable "Graymin"  was declared but never referenced
+  			u16 Graymin=65535;
+main.c(154): warning:  #177-D: variable "led0pwmval"  was declared but never referenced
   	u16 led0pwmval=0;    
-main.c(154): warning:  #177-D: variable "dir"  was declared but never referenced
+main.c(155): warning:  #177-D: variable "dir"  was declared but never referenced
   	u8 dir=1;
-main.c: 2 warnings, 0 errors
+main.c: 8 warnings, 0 errors
+compiling ov2640.c...
+..\HARDWARE\TIMER\timer.h(19): warning:  #1-D: last line of file ends without a newline
+   
+..\HARDWARE\OV2640\ov2640.c: 1 warning, 0 errors
 linking...
-Program Size: Code=40878 RO-data=8198 RW-data=528 ZI-data=125048  
+Program Size: Code=41238 RO-data=8198 RW-data=544 ZI-data=125048  
 FromELF: creating hex file...
-"..\OBJ\OV2640.axf" - 0 Error(s), 2 Warning(s).
-Build Time Elapsed:  00:00:02
+"..\OBJ\OV2640.axf" - 0 Error(s), 10 Warning(s).
+Build Time Elapsed:  00:00:04

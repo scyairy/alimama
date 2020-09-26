@@ -184,19 +184,18 @@ int main(void)
 		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMAÅäÖÃ
 	
 		OV2640_OutSize_Set(220,280);//OV2640Êä³öÍ¼Ïñ³ß´çÎª£º176X144
-	
-///////////////////////////////////////////////////////////////////////////////////////
-//Ëï¾°éª
+
+////////////////////////////////////////////////////////////////////////////////////////		
 	LED0_PWM_VAL=2475;
 	while(1)
 	{
 			u16 i,temp_h,temp_l,temp,gray0,gray1;
-			u16 Graymax=0;
-			u16 Graymin=65535;
-			delay_ms(10);
+			// u16 Graymax=0;
+			// u16 Graymin=65535;
+			// delay_ms(10);
 
 			OV2640_RGB565_Mode();
-			DCMI_Start(); 		//Æô¶¯´«Êä
+			DCMI_Start();//Æô¶¯´«Êä
 			DCMI_Stop(); //Í£Ö¹ÏÔÊ¾
 
 			LCD_Set_Window(0,0,220,280);	//ÉèÖÃ´°¿Ú       -----ÆÁÄ»ÏÔÊ¾¶þÖµ»¯Í¼--------
@@ -215,24 +214,24 @@ int main(void)
 					sum_x += (i%220);
 					sum_1++;
 				}
-				if(temp_h==0xffff)
+				if(temp_h==0XFFFF)
 				{
 					sum_x += (i%220);
 					sum_1++;
 				}
 			}
 
-			LCD_ShowString(10,200,48,16,16,"weizhi:");
+			// LCD_ShowString(10,200,48,16,16,"weizhi:");
 			LCD_ShowNum(59,200,(u32)sum_x/sum_1,6,16);	
 			if((sum_x/sum_1)>120)
 			{
-				LED0_PWM_VAL=LED0_PWM_VAL+1;	
-				delay_ms(300);	 
+				LED0_PWM_VAL=LED0_PWM_VAL+10;	
+				delay_ms(100);	 
 			}
 			else if((sum_x/sum_1)<90)
 			{
-				LED0_PWM_VAL=LED0_PWM_VAL-1;	
-				delay_ms(300);
+				LED0_PWM_VAL=LED0_PWM_VAL-10;	
+				delay_ms(1 00);
 			}
 			else
 			{
@@ -247,8 +246,7 @@ int main(void)
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//ÕÅ»Ô			
+///////////////////////////////////////////////////////////////////////////////////////		
 // 	while(1)
 // 	{
 		
@@ -314,7 +312,7 @@ int main(void)
 					
 // 					LCD->LCD_RAM = temp_l;
 					
-// 					temp_h=Binary(temp_l);
+// 					temp_h=Binary(temp_h);
 					
 // 					if(temp_h==0XFFFF)
 // 					{
