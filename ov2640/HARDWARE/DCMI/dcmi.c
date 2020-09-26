@@ -57,7 +57,7 @@ void DCMI_DMA_Init(u32 memaddr,u16 memsize,u8 memblen,u8 meminc)
 	DMA2_Stream1->CR|=1<<25;	//通道1 DCMI通道 
 } 
 //DCMI初始化
-void ct(void)
+void MY_DMA_Init(void)
 {
 	//设置IO 
 	RCC->AHB1ENR|=1<<0;		//使能外设PORTA时钟

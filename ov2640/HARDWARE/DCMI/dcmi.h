@@ -14,7 +14,7 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
 
-void ct(void);
+void MY_DMA_Init(void);
 void DCMI_DMA_Init(u32 memaddr,u16 memsize,u8 memblen,u8 meminc);
 void DCMI_Start(void);
 void DCMI_Stop(void);

@@ -31,6 +31,7 @@ volatile u8 jpeg_data_ok=0;				//JPEG数据采集完成标志
 #define RGB_G 0X07E0
 #define RGB_B 0X001F
 
+u32 sum_x,sum_y,sum_1,sum_2;
 u16 R,G,B;
 //u16 r_R,r_G,r_B;
 u16 gav;
@@ -83,9 +84,7 @@ u16 Binary(u16 pixel)
 	R = (pixel&RGB_R)>>11;
     G = (pixel&RGB_G)>>5;
     B = (pixel&RGB_B);
-	  Gray = 
-	
-	(u16)((R*634+G*613+B*232));
+	Gray = (u16)((R*634+G*613+B*232));
 	
 	if(R>6&&R-0.5*G>6&&R-B>6)//如果，Y值大于等于阀值18  10  10 6m/16  6  6
 	{
@@ -157,13 +156,12 @@ int main(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	Stm32_Clock_Init(336,8,2,7);//设置时钟,168Mhz 
 	delay_init(168);			//延时初始化  
-	TIM14_PWM_Init(1999,839);
 	uart_init(115200);		//初始化串口波特率为115200 
 	usart2_init(42,115200);		//初始化串口2波特率为115200
 	LED_Init();					//初始化LED 
  	LCD_Init();					//LCD初始化
  	KEY_Init();					//按键初始化
-	
+	TIM14_PWM_Init(1999,839);
 
  	POINT_COLOR=RED;//设置字体为红色 
 	LCD_ShowString(30,10,200,16,16,"Explorer STM32F4");	 
@@ -181,145 +179,203 @@ int main(void)
 
 		LCD_Clear(WHITE);
 		POINT_COLOR=RED; 	
-		ct();
-//		MY_DCMI_Init1();			//DCMI配置
-				
+		MY_DMA_Init();			
 		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMA配置
 	
 		OV2640_OutSize_Set(220,280);//OV2640输出图像尺寸为：176X144
 	
-
-			
+///////////////////////////////////////////////////////////////////////////////////////
+//孙景楠
+	LED0_PWM_VAL=2475;
 	while(1)
 	{
-		
-			u16 i,j,temp_l,temp_h,temp1,temp2,flag=0;
-			u32 sumx=0,sumy=0,area=0;
-			u16 xmin,xmax,ymin,ymax;
-			u16 x,y;
-				OV2640_RGB565_Mode();
-				DCMI_Start(); 		//启动传输
-//				DCMI_Stop(); //停止显示
-	
-				LCD_Set_Window(0,0,220,280);	//设置窗口       -----屏幕显示二值化图--------
-				LCD_WriteRAM_Prepare();	//开始写入GRAM
-		
-				xmin=xmax=ymin=ymax=0;
-				for(i=0;i<220*280/2;i++)
-				{	
-					temp_l=(u16)(yuv_buf[i]);
-					temp_h=(u16)(yuv_buf[i]>>16);
-				  	
-					temp_l=Binary(temp_l);
-					
-					if(temp_l==0XFFFF)
-					{
-//							sumx=sumx+(i%220);
-//						  sumy=sumy+(i/220);
-//						  area=area+1;
-				
-						if(flag==0)
-						{
-								xmin=xmax=(i*2)%220;
-								ymin=ymax=(i*2)/220;
-								flag=1;
-						}
-						else
-						{
-								temp1=(i*2)%220;
-								temp2=(i*2)/220;
-								if(temp1<xmin)
-								{
-									xmin=temp1;	
-								}
-								else if(temp1>xmax)
-								{
-									xmax=temp1;
-								}
-								if(temp2<ymin)
-								{
-									ymin=temp2;
-									
-								}
-								else if(temp2>ymax)
-								{
-									ymax=temp2;
-								
-								}
-									
-						}
-						
-					}
-					
-					LCD->LCD_RAM = temp_l;
-					
-					temp_h=Binary(temp_l);
-					
-					if(temp_h==0XFFFF)
-					{
-//							sumx=sumx+(i*2)%220;
-//						  sumy=sumy+(i/220);
-//						  area=area+1;
-		
-						if(flag==0)
-						{
-								xmin=xmax=(i*2)%220+1;
-								ymin=ymax=(i*2)/220;
-								flag=1;
-						}
-						else
-						{
-								temp1=(i*2)%220+1;
-								temp2=(i*2)/220;
-								if(temp1<xmin)
-								{
-									xmin=temp1;	
-								}
-								else if(temp1>xmax)
-								{
-									xmax=temp1;
-								}
-								if(temp2<ymin)
-								{
-									ymin=temp2;
-									
-								}
-								else if(temp2>ymax)
-								{
-									ymax=temp2;
-								
-								}
-																			
-					}					
-				}
-			 LCD->LCD_RAM = temp_h;		
-			}	
-			    x=(xmin+xmax)/2;
-					y=(ymin+ymax)/2;
-////				x=sumx/area;
-////				y=sumy/area;
-				if(x!=0 && y!=0)
+			u16 i,temp_h,temp_l,temp,gray0,gray1;
+			u16 Graymax=0;
+			u16 Graymin=65535;
+			delay_ms(10);
+
+			OV2640_RGB565_Mode();
+			DCMI_Start(); 		//启动传输
+			DCMI_Stop(); //停止显示
+
+			LCD_Set_Window(0,0,220,280);	//设置窗口       -----屏幕显示二值化图--------
+			LCD_WriteRAM_Prepare();	//开始写入GRAM
+
+			sum_x = 0;
+			sum_1 = 0;
+			
+			for(i=0;i<200*280*2/4;i=i+2)
+			{
+				temp_l=(u16)(yuv_buf[i]);
+				temp_h=(u16)(yuv_buf[i]>>16);
+				temp_l=Binary(temp_l);
+				if(temp_l==0XFFFF)
 				{
-						LCD_Draw_Circle(x,y,5);
+					sum_x += (i%220);
+					sum_1++;
 				}
-					
-					if(x>0&&x<=220)		
-					{
-						dir=1;
-						led0pwmval=50+((110-x)*200)/110;
-						LCD_ShowxNum(30+11*8,140,110-x,3,16,0);
-					}
-					else if(x>220)
-					{
-						dir=0;
-						led0pwmval=250-(200*(x-110))/110;
-						LCD_ShowxNum(30+11*8,140,x-110,3,16,0);
-					}
-					TIM_SetCompare1(TIM14,led0pwmval);	//修改比较值，修改占空比
-					
-					delay_ms(100);
+				if(temp_h==0xffff)
+				{
+					sum_x += (i%220);
+					sum_1++;
+				}
+			}
+
+			LCD_ShowString(10,200,48,16,16,"weizhi:");
+			LCD_ShowNum(59,200,(u32)sum_x/sum_1,6,16);	
+			if((sum_x/sum_1)>120)
+			{
+				LED0_PWM_VAL=LED0_PWM_VAL+1;	
+				delay_ms(300);	 
+			}
+			else if((sum_x/sum_1)<90)
+			{
+				LED0_PWM_VAL=LED0_PWM_VAL-1;	
+				delay_ms(300);
+			}
+			else
+			{
+				LED0_PWM_VAL=2475;
+			}
+			
+				
+			LCD_ShowNum(80,240,(u32)sum_x,8,16);
+			LCD_ShowNum(80,160,(u32)sum_1,6,16);
 	}
+///////////////////////////////////////////////////////////////////////////////////////
+//张辉			
+// 	while(1)
+// 	{
+		
+// 			u16 i,j,temp_l,temp_h,temp1,temp2,flag=0;
+// 			u32 sumx=0,sumy=0,area=0;
+// 			u16 xmin,xmax,ymin,ymax;
+// 			u16 x,y;
+// 				OV2640_RGB565_Mode();
+// 				DCMI_Start(); 		//启动传输
+// //				DCMI_Stop(); //停止显示
 	
+// 				LCD_Set_Window(0,0,220,280);	//设置窗口       -----屏幕显示二值化图--------
+// 				LCD_WriteRAM_Prepare();	//开始写入GRAM
+		
+// 				xmin=xmax=ymin=ymax=0;
+// 				for(i=0;i<220*280/2;i++)
+// 				{	
+// 					temp_l=(u16)(yuv_buf[i]);
+// 					temp_h=(u16)(yuv_buf[i]>>16);
+				  	
+// 					temp_l=Binary(temp_l);
+					
+// 					if(temp_l==0XFFFF)
+// 					{
+
+						
+// 						// sumx=sumx+(i%220);
+// 						// sumy=sumy+(i/220);
+// 						// area=area+1;
+				
+// 						if(flag==0)
+// 						{
+// 								xmin=xmax=(i*2)%220;
+// 								ymin=ymax=(i*2)/220;
+// 								flag=1;
+// 						}
+// 						else
+// 						{
+// 								temp1=(i*2)%220;
+// 								temp2=(i*2)/220;
+// 								if(temp1<xmin)
+// 								{
+// 									xmin=temp1;	
+// 								}
+// 								else if(temp1>xmax)
+// 								{
+// 									xmax=temp1;
+// 								}
+// 								if(temp2<ymin)
+// 								{
+// 									ymin=temp2;
+									
+// 								}
+// 								else if(temp2>ymax)
+// 								{
+// 									ymax=temp2;
+								
+// 								}
+									
+// 						}
+						
+// 					}
+					
+// 					LCD->LCD_RAM = temp_l;
+					
+// 					temp_h=Binary(temp_l);
+					
+// 					if(temp_h==0XFFFF)
+// 					{
+// //							sumx=sumx+(i*2)%220;
+// //						  sumy=sumy+(i/220);
+// //						  area=area+1;
+		
+// 						if(flag==0)
+// 						{
+// 								xmin=xmax=(i*2)%220+1;
+// 								ymin=ymax=(i*2)/220;
+// 								flag=1;
+// 						}
+// 						else
+// 						{
+// 								temp1=(i*2)%220+1;
+// 								temp2=(i*2)/220;
+// 								if(temp1<xmin)
+// 								{
+// 									xmin=temp1;	
+// 								}
+// 								else if(temp1>xmax)
+// 								{
+// 									xmax=temp1;
+// 								}
+// 								if(temp2<ymin)
+// 								{
+// 									ymin=temp2;
+									
+// 								}
+// 								else if(temp2>ymax)
+// 								{
+// 									ymax=temp2;
+								
+// 								}
+																			
+// 					}					
+// 				}
+// 			 LCD->LCD_RAM = temp_h;		
+// 			}	
+// 			    x=(xmin+xmax)/2;
+// 					y=(ymin+ymax)/2;
+// ////				x=sumx/area;
+// ////				y=sumy/area;
+// 				if(x!=0 && y!=0)
+// 				{
+// 						LCD_Draw_Circle(x,y,5);
+// 				}
+					
+// 					if(x>0&&x<=220)		
+// 					{
+// 						dir=1;
+// 						led0pwmval=50+((110-x)*200)/110;
+// 						LCD_ShowxNum(30+11*8,140,110-x,3,16,0);
+// 					}
+// 					else if(x>220)
+// 					{
+// 						dir=0;
+// 						led0pwmval=250-(200*(x-110))/110;
+// 						LCD_ShowxNum(30+11*8,140,x-110,3,16,0);
+// 					}
+// 					TIM_SetCompare1(TIM14,led0pwmval);	//修改比较值，修改占空比
+					
+// 					delay_ms(100);
+// 	}
+///////////////////////////////////////////////////////////////////////////////////////	
 	
 	
 // while(1)
