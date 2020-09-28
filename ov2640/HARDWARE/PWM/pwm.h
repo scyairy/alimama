@@ -13,6 +13,7 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2014-2024
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
-#define LED0_PWM_VAL TIM14->CCR1 
-void TIM14_PWM_Init(u32 arr,u32 psc);
+#define PWM_down TIM4->CCR1
+#define PWM_up TIM4->CCR2
+void TIM4_PWM_Init(u32 arr,u32 psc);
 #endif
