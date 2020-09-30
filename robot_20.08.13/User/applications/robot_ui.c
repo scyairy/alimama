@@ -8,7 +8,7 @@
 
 void robot_ui_init(void)
 {
-	if(KEY_OK)
+	if(KEY_OK)/////(!KEY_OK)/////为复位加确认键进入操作界面
 	{
 	OLED_Clear();	
 	OLED_ShowString(0,0,"->RobotRun",12);
