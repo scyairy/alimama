@@ -34,6 +34,20 @@ while(1)
 //	route_6_To_8();
 		
 		
+//		PID_to_Angle(350);
+// 	 	Tiyi_Laser_R_1point(385);
+// 		motor_stop();
+// 		rt_thread_delay(200);
+// 		motor_time(1000,200,200);//µπÕÀ“ª∂Œ
+// 		rt_thread_delay(100);
+// 		turn_angle(-28,350);//30		
+// 		while(1)
+// 		{		
+// //			mot(-350,-350);
+// 			motor_stop();
+// 		}
+		
+		
 //	Road_to_Angle(350);
 //	motor_time(110,380,300);
 //	Xiepo_Laser8_time(550,310);
@@ -44,15 +58,15 @@ while(1)
 //liuleliule_8();
 		
 //liuleliule_7();		
-PID_to_time(400,3000);
+//PID_to_time(400,3000);
 //Road_to_time(350,9000);		
 
 
-//route_1_To_2();
-//route_2_To_4();
-//route_4_To_5();		
-//route_5_To_8();
-//liuleliule_8();	
+route_1_To_2();
+route_2_To_4();
+route_4_To_5();		
+route_5_To_8();
+liuleliule_8();	
 //PID_to_Angle(350);
 //PID_Laser_R_1point(350);
 //route_5_To_7();

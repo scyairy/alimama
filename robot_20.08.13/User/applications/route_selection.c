@@ -303,7 +303,7 @@ void route_5_To_8(void)
 		}
 		motor_stop();			
 		rt_thread_delay(100);
-		turn_angle_qqb(-85,215,-110);
+		// turn_angle_qqb(-85,215,-110);
 		while(mms--)//Infrared2
 		{
 			if(laser_l==1&&laser_r==0)

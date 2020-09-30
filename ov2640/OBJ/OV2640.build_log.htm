@@ -22,12 +22,27 @@ Dialog DLL:      TCM.DLL V1.36.2.0
  
 <h2>Project:</h2>
 F:\Git\workspace\alimama\ov2640\USER\OV2640.uvprojx
-Project File Date:  09/26/2020
+Project File Date:  09/28/2020
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\MDK5\ARM\ARMCC\Bin'
 Build target 'OV2640'
-"..\OBJ\OV2640.axf" - 0 Error(s), 0 Warning(s).
+compiling main.c...
+..\HARDWARE\TIMER\timer.h(19): warning:  #1-D: last line of file ends without a newline
+   
+main.c(203): warning:  #177-D: variable "temp"  was declared but never referenced
+   		u16 i,temp_h,temp_l,temp,gray0,gray1;
+main.c(203): warning:  #177-D: variable "gray0"  was declared but never referenced
+   		u16 i,temp_h,temp_l,temp,gray0,gray1;
+main.c(203): warning:  #177-D: variable "gray1"  was declared but never referenced
+   		u16 i,temp_h,temp_l,temp,gray0,gray1;
+main.c(454): warning:  #1-D: last line of file ends without a newline
+  }
+main.c: 5 warnings, 0 errors
+linking...
+Program Size: Code=41022 RO-data=8198 RW-data=544 ZI-data=125048  
+FromELF: creating hex file...
+"..\OBJ\OV2640.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -41,7 +56,7 @@ Package Vendor: Keil
   F:\MDK5\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

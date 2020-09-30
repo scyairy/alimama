@@ -21,19 +21,31 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
 Dialog DLL:      TCM.DLL V1.36.2.0
  
 <h2>Project:</h2>
-F:\实验室\机器人比赛\robot_20.08.13\project\robot.uvprojx
-Project File Date:  10/16/2019
+F:\Git\workspace\alimama\robot_20.08.13\project\robot.uvprojx
+Project File Date:  09/29/2020
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\MDK5\ARM\ARMCC\Bin'
 Build target 'robot'
-compiling robot_run.c...
+compiling map.c...
 ..\User\applications\track.h(103): warning:  #1295-D: Deprecated declaration turn_right_angle - give arg types
   void turn_right_angle();//根据灰度转角
-..\User\applications\robot_run.c: 1 warning, 0 errors
+..\User\applications\route_selection.h(28): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\User\applications\map.c(44): warning:  #68-D: integer conversion resulted in a change of sign
+  		motor_time(1000,-200,-200);//倒退一段
+..\User\applications\map.c(44): warning:  #68-D: integer conversion resulted in a change of sign
+  		motor_time(1000,-200,-200);//倒退一段
+..\User\applications\map.c(86): warning:  #111-D: statement is unreachable
+  		rt_thread_delay(10);
+..\User\applications\map.c(22): warning:  #177-D: variable "mms"  was declared but never referenced
+  	int mms=4000;
+..\User\applications\map.c(98): warning:  #177-D: variable "init_thread"  was declared but never referenced
+      rt_thread_t init_thread;
+..\User\applications\map.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=74808 RO-data=8732 RW-data=928 ZI-data=20944  
-".\Objects\robot.axf" - 0 Error(s), 1 Warning(s).
+Program Size: Code=75536 RO-data=8732 RW-data=904 ZI-data=20896  
+".\Objects\robot.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -47,7 +59,7 @@ Package Vendor: Keil
   F:\MDK5\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
