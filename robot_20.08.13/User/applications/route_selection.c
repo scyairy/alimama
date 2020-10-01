@@ -13,12 +13,12 @@
 void route_1_To_2(void)
 {
 	Down_Platform();	
-	PID_to_Angle(400);
+	PID_to_Angle(550);
 	motor_time(500,370,370);
 	though_brige(310);
 	motor_stop();
   rt_thread_delay(300);
-	PID_to_Angle(500);
+	PID_to_Angle(550);
 	Up_Platform();
 	//turn_angle(180,500);
 //	twinkling11111();
@@ -30,7 +30,7 @@ void route_2_To_4(void)
 		Down_Platform();
 //	Road_to_time(350,200);//延时检测  需要调整
 	  slow_acceleration(200,385,500);//防止较快加速小车翘起
-	  Tiyi_Laser_R_1point(385);
+	  PID_Laser_R_1point(550);//385
 //	Laser_track_point(450,1);		
 		motor_stop();
 		rt_thread_delay(200);
@@ -39,11 +39,11 @@ void route_2_To_4(void)
 		turn_angle(-28,350);//30
 		rt_thread_delay(100);		
 		slow_acceleration(200,320,500);//防止较快加速小车翘起
-		PID_to_Angle(320);
+		PID_to_Angle(400);//320
 //  Retarder_plate(1600);	
 	  through_slow_down(200,210,1200);//过减速板，特别注意时间
 	  through_slow_down(210,200,1200);//过减速板，特别注意时间
-	  PID_Laser_R_1point(350);
+	  PID_Laser_R_1point(500);//350
 	  motor_time(350,300,300);//前进一段		
 	  rt_thread_delay(100);//到转角暂停0.1s
 		
@@ -53,7 +53,8 @@ void route_2_To_4(void)
 //	  Tiyi_Laser_R_1point(320);
 //	motor_stop();
 //	while(1);
-		PID_to_Angle(450);
+		slow_acceleration(200,600,800);//防止较快加速小车翘起
+		PID_to_Angle(600);//450
 		Up_Platform();
 //	twinkling11111();
 }
@@ -141,23 +142,23 @@ void route_4_To_5(void)
 		turn_angle(178,400);
 //		u8 which_gray[3]={0,1,2};
 		Down_Platform();
-    slow_acceleration(200,500,400);	
-		PID_Laser_L_1point(500);		
+    slow_acceleration(200,600,400);	
+		PID_Laser_L_1point(600);		//500
 		motor_time(100,200,200);
 		rt_thread_delay(100);//转角后停0.1s
 		turn_angle(85,350);  //90
 		rt_thread_delay(100);
 		motor_time(100,200,200);
-		PID_to_Angle(450);
+		PID_to_Angle(450);//450
 		through_door(250,1600);//过门  400  1200
 		slow_acceleration(250,500,400);
-		PID_Laser_L_1point(500);
+		PID_Laser_L_1point(600);//500
 		motor_time(100,200,200);
 		rt_thread_delay(100);//检测到路口停0.2s	
 		turn_angle(87,400);
 		rt_thread_delay(100);
 		slow_acceleration(200,450,300);//避免突然启动检测到上坡
-		Road_to_Angle(500);
+		PID_to_Angle(600);//500
 		Up_Platform();
 //		twinkling11111();
 }
@@ -283,51 +284,56 @@ void route_5_To_8(void)
 	turn_angle(178,400);
 		Down_Platform();
 		slow_acceleration(200,500,600);//
-	  Tiyi_Laser_L_2point(500);
+	  PID_Laser_L_1point(600);
 		motor_time(90,300,300);
 	  rt_thread_delay(100);
 		turn_angle(89,350);
 		slow_acceleration(200,400,300);//防止较快加速小车翘起
-		Road_to_Angle(450);//检测上板
-		while(1)
-		{
-			if(laser_l==1||laser_r==1)
-			{
-				rt_thread_delay(10);
-				if(laser_l==1&&laser_r==0) break;//根据激光传感器检测
-				if(laser_r==1) {motor_stop(); turn_angle(-3,300);break;}
-			//	if(laser_l==1&&laser_r==1) {turn_angle(-3,300);break;}
-			}
-			else
-			{mot(300,300);}
-		}
-		motor_stop();			
-		rt_thread_delay(100);
+//		PID_to_Angle(450);//检测上板
+//		while(1)
+//		{
+//			if(laser_l==1||laser_r==1)
+//			{
+//				rt_thread_delay(10);
+//				if(laser_l==1&&laser_r==0) break;//根据激光传感器检测
+//				if(laser_r==1) {motor_stop(); turn_angle(-3,300);break;}
+//			//	if(laser_l==1&&laser_r==1) {turn_angle(-3,300);break;}
+//			}
+//			else
+//			{mot(300,300);}
+			
+//		}
+
+
 		// turn_angle_qqb(-85,215,-110);
-		while(mms--)//Infrared2
-		{
-			if(laser_l==1&&laser_r==0)
-			{
-				mot(300,300*0.9);
-			}
-			else if(laser_l==0&&laser_r==1)
-			{
-				mot(300*0.9,300);
-			}				
-		mot(225,225);
-		}
+//		while(mms--)//Infrared2
+//		{
+//			if(laser_l==1&&laser_r==0)
+//			{
+//				mot(300,300*0.9);
+//			}
+//			else if(laser_l==0&&laser_r==1)
+//			{
+//				mot(300*0.9,300);
+//			}				
+//		mot(225,225);
+//		}
 //		motor_stop();
 //		rt_thread_delay(100);
 //		
 //		slow_acceleration(200,350,1000);
 //		motor_stop();
 //		while(1);
-		Road_to_Angle(350);//检测上板
+//		Road_to_Angle(350);//检测上板
 		
 //		motor_time(170,0,200);//左右甩一甩
 //    rt_thread_delay(50);
 //    motor_time(170,200,0);
-		
+		PID_to_Angle(450);
+		motor_time(250,300,300);
+		turn_angle(-88,350);
+		motor_time(800,350,380);
+		PID_to_Angle(400);
     Tiyi_Up_Mount(300,2);
 //		twinkling11111();
 
@@ -456,7 +462,7 @@ void liuleliule_8(void)
 //	rt_thread_delay(200);
 	Road_to_Angle_8(350);
 	motor_time(110,380,300);
-	Xiepo_Laser8_time(380,310);
+	Xiepo_Laser8_time(300,310);
 //	motor_time(1200,225,220);//检测到上斜坡后mot     比赛时需要改360,300,300   1500,205,200
 	rt_thread_delay(100);
 	turn_angle_qqb(90,-300,200);

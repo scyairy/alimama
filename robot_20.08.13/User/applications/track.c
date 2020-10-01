@@ -660,7 +660,7 @@ void Up_Platform(void)			//上平台  改过
 //		}
 //		rt_thread_delay(1);
 //	}
-	motor_time(700,250,250);//750
+	motor_time(650,250,250);//750
 //	turn_angle(-1,200);//上平台后向右转2度
 //	motor_stop();
 //		while(1)
@@ -1754,6 +1754,13 @@ void Tiyi_Laser_L_2point(u16 speed)
 	}		
 	motor_stop();
 }
+
+
+// void PID_Laser_R_2Point(u16 speed)//PID路口寻迹，scy改
+// {
+
+
+// }
 
 void Tiyi_Laser_R_2point(u16 speed)
 {

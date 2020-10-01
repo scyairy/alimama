@@ -127,6 +127,8 @@ void Retarder_plate(rt_uint16_t slow_times);		//¼õËÙ°å    5000  10
 void highspeed_ForwardTrack(rt_int16_t l_speed,rt_int16_t r_speed);
 void PID_Laser_L_1point(u16 speed);
 void PID_Laser_R_1point(u16 speed);
+// void PID_Laser_R_2Point(u16 speed);
+// void PID_Laser_L_2Point(u16 speed);
 void Tiyi_Laser_R_1point(u16 speed);
 void Tiyi_Laser_R_2point(u16 speed);
 void Tiyi_Laser_L_2point(u16 speed);
