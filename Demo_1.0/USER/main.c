@@ -156,7 +156,7 @@ int main(void)
 {        
 //	u8 key=0;
 //	u16 threshold=80;	//二值化时用到的阀值变量   threshold=128   TEST
-	
+	u16 error1=0;
 	u16 led0pwmval=0;    
 	u8 dir=1;
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -165,33 +165,33 @@ int main(void)
 	uart_init(115200);		//初始化串口波特率为115200 
 	usart2_init(42,115200);		//初始化串口2波特率为115200
 	LED_Init();					//初始化LED 
-// 	LCD_Init();					//LCD初始化
-// 	KEY_Init();					//按键初始化
+	// LCD_Init();					//LCD初始化
+	KEY_Init();					//按键初始化
 	TIM4_PWM_Init(7999,209);//辉
 	// TIM14_PWM_Init(3000-1,200-1);	//楠
 
-// 	POINT_COLOR=RED;//设置字体为红色 
-//	LCD_ShowString(30,10,200,16,16,"Explorer STM32F4");	 
-//	while(OV2640_Init())//初始化OV2640
-//	{
-//		LCD_ShowString(30,30,240,16,16,"OV2640 ERROR");
-//		delay_ms(200);
-//	    LCD_Fill(30,130,239,170,WHITE);
-//		delay_ms(200);
-//	} 
-//	LCD_ShowString(30,30,200,16,16,"OV2640 OK");
+	// POINT_COLOR=RED;//设置字体为红色 
+	// LCD_ShowString(30,10,200,16,16,"Explorer STM32F4");	 
+	while(OV2640_Init())//初始化OV2640
+	{
+			LED0=~LED0;
+		// LCD_ShowString(30,30,240,16,16,"OV2640 ERROR");
+		delay_ms(400);
+	    // LCD_Fill(30,130,239,170,WHITE);
+		// delay_ms(200);
+	} 
+	// LCD_ShowString(30,30,200,16,16,"OV2640 OK");
+	delay_ms(500);
+	
 
-//	delay_ms(500);
-//	
-
-//		LCD_Clear(WHITE);
-//		POINT_COLOR=RED; 	
-//		MY_DMA_Init();			
-//		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMA配置
-//	
-//		OV2640_OutSize_Set(220,280);//OV2640输出图像尺寸为：176X144
-//		PWM_down=700;
-//		PWM_up=800;
+		// LCD_Clear(WHITE);
+		// POINT_COLOR=RED; 	
+		MY_DMA_Init();			
+		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMA配置
+	
+		OV2640_OutSize_Set(220,280);//OV2640输出图像尺寸为：176X144
+		PWM_down=740;
+		PWM_up=380;
 
 ////////////////////////////////////////////////////////////////////////////////////////		
 	// PWM_down=150;
@@ -259,265 +259,441 @@ int main(void)
 	// }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+//追踪
+	while(1)
+	{
+			u16 i,j,temp_l,temp_h,temp1,temp2,flag=0,num=0;
+			u32 sumx=0,sumy=0,area=0;
+			u16 xmin,xmax,ymin,ymax;
+			u16 x=0,y=0;
+
+				OV2640_RGB565_Mode();
+				DCMI_Start(); 		//启动传输
+				//DCMI_Stop(); //停止显示
+	
+				// LCD_Set_Window(0,0,220,280);	//设置窗口       -----屏幕显示二值化图--------
+				// LCD_WriteRAM_Prepare();	//开始写入GRAM
+		
+				xmin=xmax=ymin=ymax=0;
+		
+				for(i=0;i<220*280/2;i++)
+				{
+					temp_l=(u16)(yuv_buf[i]);
+					temp_h=(u16)(yuv_buf[i]>>16);
+					temp_l=Binary(temp_l);					
+					if(temp_l==0XFFFF)
+					{
+							num++;
+					}
+					// LCD->LCD_RAM = temp_l;
+					temp_h=Binary(temp_h);					
+					if(temp_h==0XFFFF)
+					{
+							num++;
+					}
+				if(num>=200)
+				{
+					for(i=0;i<220*280/2;i++)
+						{	
+							temp_l=(u16)(yuv_buf[i]);
+							temp_h=(u16)(yuv_buf[i]>>16);
+								
+							temp_l=Binary(temp_l);
+							
+							if(temp_l==0XFFFF)
+							{
+
+								
+								// sumx=sumx+(i%220);
+								// sumy=sumy+(i/220);
+								// area=area+1;
+						
+								if(flag==0)
+								{
+										xmin=xmax=(i*2)%220;
+										ymin=ymax=(i*2)/220;
+										flag=1;
+								}
+								else
+								{
+										temp1=(i*2)%220;
+										temp2=(i*2)/220;
+										if(temp1<xmin)
+										{
+											xmin=temp1;	
+										}
+										else if(temp1>xmax)
+										{
+											xmax=temp1;
+										}
+										if(temp2<ymin)
+										{
+											ymin=temp2;
+											
+										}
+										else if(temp2>ymax)
+										{
+											ymax=temp2;
+										
+										}
+											
+								}
+								
+							}
+							
+							//LCD->LCD_RAM = temp_l;
+							
+							temp_h=Binary(temp_h);
+							
+							if(temp_h==0XFFFF)
+							{
+		//							sumx=sumx+(i*2)%220;
+		//						  sumy=sumy+(i/220);
+		//						  area=area+1;
+				
+								if(flag==0)
+								{
+										xmin=xmax=(i*2)%220+1;
+										ymin=ymax=(i*2)/220;
+										flag=1;
+								}
+								else
+								{
+										temp1=(i*2)%220+1;
+										temp2=(i*2)/220;
+										if(temp1<xmin)
+										{
+											xmin=temp1;	
+										}
+										else if(temp1>xmax)
+										{
+											xmax=temp1;
+										}
+										if(temp2<ymin)
+										{
+											ymin=temp2;
+											
+										}
+										else if(temp2>ymax)
+										{
+											ymax=temp2;
+										
+										}
+																					
+								}					
+							}
+					// LCD->LCD_RAM = temp_h;		
+						}	
+							x=(xmin+xmax)/2;
+							y=(ymin+ymax)/2;
+							Adjust_PID(x,y);
+///////////////////////////////////////////////////////////////////////////////////////	
+/* 					if(x>0 && x<100)
+					{
+						PWM_down=PWM_down+20;
+					}	
+					else if(x>120)
+					{
+						PWM_down=PWM_down-20;
+					}
+					else
+					{
+						PWM_down=PWM_down;
+					}
+					if(y>0 && y<130)
+					{
+						PWM_up=PWM_up-8;
+					}
+					else if (y>150)
+					{
+						PWM_up=PWM_up+8;						
+					}
+					else
+					{
+						PWM_up=PWM_up;
+					}	 */
+///////////////////////////////////////////////////////////////////////////////////////
+					
+					
+				}		
+
+	}
+	}
+///////////////////////////////////////////////////////////////////////////////////////	
+//扫描	
+// 	while(1)
+// 	{
+		
+// 			u16 i,j,temp_l,temp_h,temp1,temp2,flag=0;
+// 			u32 sumx=0,sumy=0,area=0;
+// 			u16 xmin,xmax,ymin,ymax;
+// 			u16 x,y,pwmr=0,pwmr2=0,signal=0,sign=0;
+// 			u32 num=0,upangle,end;
+
+// 				OV2640_RGB565_Mode();
+// 				DCMI_Start(); 		//启动传输
+// 				DCMI_Stop(); //停止显示
+	
+// 				// LCD_Set_Window(0,0,220,280);	//设置窗口       -----屏幕显示二值化图--------
+// 				// LCD_WriteRAM_Prepare();	//开始写入GRAM
+		
+// 				xmin=xmax=ymin=ymax=0;
+		
+// 				for(i=0;i<220*280/2;i++)
+// 				{
+// 					temp_l=(u16)(yuv_buf[i]);
+// 					temp_h=(u16)(yuv_buf[i]>>16);
+// 					temp_l=Binary(temp_l);					
+// 					if(temp_l==0XFFFF)
+// 					{
+// 							num++;
+// 					}
+// 					// LCD->LCD_RAM = temp_l;
+// 					temp_h=Binary(temp_h);					
+// 					if(temp_h==0XFFFF)
+// 					{
+// 							num++;
+// 					}			
+// 				// LCD->LCD_RAM = temp_h;		
+// 				}
+// 				if(num>300)
+// 				{
+						
+// 							for(i=0;i<220*280/2;i++)
+// 						{	
+// 							temp_l=(u16)(yuv_buf[i]);
+// 							temp_h=(u16)(yuv_buf[i]>>16);
+								
+// 							temp_l=Binary(temp_l);
+							
+// 							if(temp_l==0XFFFF)
+// 							{
+
+								
+// 								// sumx=sumx+(i%220);
+// 								// sumy=sumy+(i/220);
+// 								// area=area+1;
+						
+// 								if(flag==0)
+// 								{
+// 										xmin=xmax=(i*2)%220;
+// 										ymin=ymax=(i*2)/220;
+// 										flag=1;
+// 								}
+// 								else
+// 								{
+// 										temp1=(i*2)%220;
+// 										temp2=(i*2)/220;
+// 										if(temp1<xmin)
+// 										{
+// 											xmin=temp1;	
+// 										}
+// 										else if(temp1>xmax)
+// 										{
+// 											xmax=temp1;
+// 										}
+// 										if(temp2<ymin)
+// 										{
+// 											ymin=temp2;
+											
+// 										}
+// 										else if(temp2>ymax)
+// 										{
+// 											ymax=temp2;
+										
+// 										}
+											
+// 								}
+								
+// 							}
+							
+// 							//LCD->LCD_RAM = temp_l;
+							
+// 							temp_h=Binary(temp_h);
+							
+// 							if(temp_h==0XFFFF)
+// 							{
+// 		//							sumx=sumx+(i*2)%220;
+// 		//						  sumy=sumy+(i/220);
+// 		//						  area=area+1;
+				
+// 								if(flag==0)
+// 								{
+// 										xmin=xmax=(i*2)%220+1;
+// 										ymin=ymax=(i*2)/220;
+// 										flag=1;
+// 								}
+// 								else
+// 								{
+// 										temp1=(i*2)%220+1;
+// 										temp2=(i*2)/220;
+// 										if(temp1<xmin)
+// 										{
+// 											xmin=temp1;	
+// 										}
+// 										else if(temp1>xmax)
+// 										{
+// 											xmax=temp1;
+// 										}
+// 										if(temp2<ymin)
+// 										{
+// 											ymin=temp2;
+											
+// 										}
+// 										else if(temp2>ymax)
+// 										{
+// 											ymax=temp2;
+										
+// 										}
+																					
+// 								}					
+// 							}
+// 					// LCD->LCD_RAM = temp_h;		
+// 						}	
+// 							x=(xmin+xmax)/2;
+// 							y=(ymin+ymax)/2;
+// 		////				x=sumx/area;
+// 		////				y=sumy/area;
+// 						// LCD_ShowxNum(30+11*8,140,x,3,16,0);
+// 						// LCD_ShowxNum(30+11*8,160,y,3,16,0);
+// 						if(x!=0 && y!=0)
+// 						{
+// 								// LCD_Draw_Circle(x,y,5);
+// 						}
+							
+					
+// 						if(x<100 )
+// 						{
+// 							LED0=~LED0;
+// 							PWM_down=PWM_down+1;
+// 							error1=error1+1;
+// 							// LCD_ShowxNum(30+11*8,180,error1,3,16,0);
+// 						}
+// 						else if(x>=100 && x<=120 && sign==0)
+// 						{
+// 							PWM_down=PWM_down;
+// 							sign=1;
+							
+// 						}
+// 						else if(x>120)
+// 						{
+// 							PWM_down=PWM_down-1;
+// 							error1=error1+1;
+// 							// LCD_ShowxNum(30+11*8,180,error1,3,16,0);
+// 						}
+// 						// LCD_ShowxNum(30+11*8,180,error1,3,16,0);
+// 						if(error1>30)
+// 						{
+// 							 LED0=~LED0;
+// 								sign=0;
+// 							PWM_up=PWM_up-20;
+// 							if(PWM_up<370)
+// 							{
+// 								PWM_up=520;
+// 							}
+// 							error1=0;
+// 						}
+						
+// 						if(sign==1)
+// 						{
+							
+// 							 //LED0=~LED0;
+// 								if(y<135)
+// 								{
+// 									PWM_up=PWM_up-2;
+// 								}
+// 								else if(y>=138 && y<=143)
+// 								{
+// 									PWM_up=PWM_up;
+// 									end=1;
+									
+// 								}
+// 								else if(y>145)
+// 								{
+// 									PWM_up=PWM_up+2;
+// 								}
+// 						}
 
 
-///////////////////////////////////////////////////////////////////////////////////////		
-//	while(1)
-//	{
-//		
-//			u16 i,j,temp_l,temp_h,temp1,temp2,flag=0;
-//			u32 sumx=0,sumy=0,area=0;
-//			u16 xmin,xmax,ymin,ymax;
-//			u16 x,y,pwmr=0,pwmr2=0,signal=0,sign=0;
-//			u32 num=0,upangle,error1=0,end;
+// 				}
+				
+// //						if(error>8)
+// //						{
+// //							delay_ms(50);
+// //								sign=0;
+// //							PWM_up=PWM_up+20;
+// //							if(PWM_up>1100)
+// //							{
+// //								
+// //								PWM_up=800;
+// //							}
+// //							error=0;
+// //						}
+// 						if(sign==1 &&error1<8)
+// 						{
+// 								continue;
+								
+// 						}
 
-//				OV2640_RGB565_Mode();
-//				DCMI_Start(); 		//启动传输
-//				DCMI_Stop(); //停止显示
-//	
-//				LCD_Set_Window(0,0,220,280);	//设置窗口       -----屏幕显示二值化图--------
-//				LCD_WriteRAM_Prepare();	//开始写入GRAM
-//		
-//				xmin=xmax=ymin=ymax=0;
-//		
-//				for(i=0;i<220*280/2;i++)
-//				{
-//					temp_l=(u16)(yuv_buf[i]);
-//					temp_h=(u16)(yuv_buf[i]>>16);
-//					temp_l=Binary(temp_l);					
-//					if(temp_l==0XFFFF)
-//					{
-//							num++;
-//					}
-//					LCD->LCD_RAM = temp_l;
-//					temp_h=Binary(temp_h);					
-//					if(temp_h==0XFFFF)
-//					{
-//							num++;
-//					}			
-//				LCD->LCD_RAM = temp_h;		
-//				}
-//				if(num>300)
-//				{
-//						
-//							for(i=0;i<220*280/2;i++)
-//						{	
-//							temp_l=(u16)(yuv_buf[i]);
-//							temp_h=(u16)(yuv_buf[i]>>16);
-//								
-//							temp_l=Binary(temp_l);
-//							
-//							if(temp_l==0XFFFF)
-//							{
+// 							if(num<300)
+// 							{		
+// 									// pwmr=pwmr+15;
+// 									PWM_down=PWM_down+35;
+// 									//LED0=~LED0;
+// 									if(PWM_down>840 && signal==0)
+// 									{
+// 											PWM_down=600;
+// 											signal=1;
+// 									}
+// 									if(signal==1)
+// 									{
+// 												PWM_up=PWM_up-20;
+											
+// 											if(PWM_up<370)
+// 											{
+// 													PWM_up=500;
+// 											}
+											
+// 											signal=0;
+// 									}
 
-//								
-//								// sumx=sumx+(i%220);
-//								// sumy=sumy+(i/220);
-//								// area=area+1;
-//						
-//								if(flag==0)
-//								{
-//										xmin=xmax=(i*2)%220;
-//										ymin=ymax=(i*2)/220;
-//										flag=1;
-//								}
-//								else
-//								{
-//										temp1=(i*2)%220;
-//										temp2=(i*2)/220;
-//										if(temp1<xmin)
-//										{
-//											xmin=temp1;	
-//										}
-//										else if(temp1>xmax)
-//										{
-//											xmax=temp1;
-//										}
-//										if(temp2<ymin)
-//										{
-//											ymin=temp2;
-//											
-//										}
-//										else if(temp2>ymax)
-//										{
-//											ymax=temp2;
-//										
-//										}
-//											
-//								}
-//								
-//							}
-//							
-//							//LCD->LCD_RAM = temp_l;
-//							
-//							temp_h=Binary(temp_h);
-//							
-//							if(temp_h==0XFFFF)
-//							{
-//		//							sumx=sumx+(i*2)%220;
-//		//						  sumy=sumy+(i/220);
-//		//						  area=area+1;
-//				
-//								if(flag==0)
-//								{
-//										xmin=xmax=(i*2)%220+1;
-//										ymin=ymax=(i*2)/220;
-//										flag=1;
-//								}
-//								else
-//								{
-//										temp1=(i*2)%220+1;
-//										temp2=(i*2)/220;
-//										if(temp1<xmin)
-//										{
-//											xmin=temp1;	
-//										}
-//										else if(temp1>xmax)
-//										{
-//											xmax=temp1;
-//										}
-//										if(temp2<ymin)
-//										{
-//											ymin=temp2;
-//											
-//										}
-//										else if(temp2>ymax)
-//										{
-//											ymax=temp2;
-//										
-//										}
-//																					
-//								}					
-//							}
-//					// LCD->LCD_RAM = temp_h;		
-//						}	
-//							x=(xmin+xmax)/2;
-//							y=(ymin+ymax)/2;
-//		////				x=sumx/area;
-//		////				y=sumy/area;
-//						LCD_ShowxNum(30+11*8,140,x,3,16,0);
-//						LCD_ShowxNum(30+11*8,160,y,3,16,0);
-//						if(x!=0 && y!=0)
-//						{
-//								LCD_Draw_Circle(x,y,5);
-//						}
-//							
-//					
-//						if(x<105 )
-//						{
-//							LED0=~LED0;
-//							PWM_down=PWM_down+1;
-//							error1=error1+1;
-//							LCD_ShowxNum(30+11*8,180,error1,3,16,0);
-//						}
-//						else if(x>=107 && x<=112 && sign==0)
-//						{
-//							PWM_down=PWM_down;
-//							sign=1;
-//							
-//						}
-//						else if(x>115)
-//						{
-//							PWM_down=PWM_down-1;
-//							error1=error1+1;
-//							LCD_ShowxNum(30+11*8,180,error1,3,16,0);
-//						}
-//						LCD_ShowxNum(30+11*8,180,error1,3,16,0);
-//						if(error1>8)
-//						{
-//							 LED0=~LED0;
-//								sign=0;
-//							PWM_up=PWM_up+20;
-//							if(PWM_up>1100)
-//							{
-//								PWM_up=800;
-//							}
-//							error1=0;
-//						}
-//						
-//						if(sign==1)
-//						{
-//							
-//							 //LED0=~LED0;
-//								if(y<135)
-//								{
-//									PWM_up=PWM_up+2;
-//								}
-//								else if(y>=138 && y<=143)
-//								{
-//									PWM_up=PWM_up;
-//									end=1;
-//									
-//								}
-//								else if(y>145)
-//								{
-//									PWM_up=PWM_up-2;
-//								}
-//						}
-
-
-//				}
-//				
-////						if(error>8)
-////						{
-////							delay_ms(50);
-////								sign=0;
-////							PWM_up=PWM_up+20;
-////							if(PWM_up>1100)
-////							{
-////								
-////								PWM_up=800;
-////							}
-////							error=0;
-////						}
-//						if(sign==1 &&error1<8)
-//						{
-//								continue;
-//								
-//						}
-
-//							if(num<300)
-//							{		
-//									// pwmr=pwmr+15;
-//									PWM_down=PWM_down+20;
-//									//LED0=~LED0;
-//									if(PWM_down>900 && signal==0)
-//									{
-//											PWM_down=700;
-//											signal=1;
-//									}
-//									if(signal==1)
-//									{
-//												PWM_up=PWM_up+20;
-//											
-//											if(PWM_up>1000)
-//											{
-//													PWM_up=800;
-//											}
-//											
-//											signal=0;
-//									}
-
-//							}
-//					
-//					delay_ms(100);
-//	}
+// 							}
+					
+// 					delay_ms(100);
+// 	}
 ///////////////////////////////////////////////////////////////////////////////////////	
 	
 ///////////////////////////////////////////////////////////////////////////////////////
-//舵机pwm测试	
+//舵机pwm测试
+//PWM_down范围470~1000 其中740为中心
+//PWM_up范围300~600 其中380为中心
 //	 PWM_up=500;
 //	 	 PWM_down=250;
- while(1)
- {
-	 LED0=~LED0;
-	 PWM_down=750;
-	 delay_ms(2000);	
-	 PWM_down=500;
-delay_ms(2000);
- PWM_down=1000;
-	delay_ms(2000); 
+//  while(1)
+//  {
+	//  LED0=~LED0;
+	//  delay_ms(500);
+	//  PWM_up=380;
+	//  delay_ms(500);	
+	//  	 PWM_down=740;
+	//  delay_ms(500);
+	//  	 PWM_up=300;
+	//  delay_ms(500);
+	//  	 PWM_down=470;
+	//  delay_ms(500);
+	//  	 PWM_up=380;
+	//  delay_ms(500);
+	//  	 PWM_down=740;
+	//  delay_ms(500);
+	//  	 PWM_up=600;
+	//  delay_ms(500);
+	//  	 PWM_down=1000;
+	//  delay_ms(500);
+// 	 PWM_down=470;
+// delay_ms(2000);
+//  PWM_down=1000;
+// 	delay_ms(2000); 
 //if(PWM_down>=800) PWM_down=500;	 
- }
+//  }
 
 }

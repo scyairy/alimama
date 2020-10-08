@@ -16,4 +16,5 @@
 #define PWM_down TIM4->CCR1
 #define PWM_up TIM4->CCR2
 void TIM4_PWM_Init(u32 arr,u32 psc);
+void Adjust_PID(int16_t x,int16_t y);
 #endif
