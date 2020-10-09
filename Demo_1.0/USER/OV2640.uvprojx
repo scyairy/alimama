@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\LCD;..\HARDWARE\KEY;..\HARDWARE\DCMI;..\HARDWARE\OV2640;..\HARDWARE\TIMER;..\HARDWARE\USART2;..\FWLIB\inc;..\USMART;..\HARDWARE\PWM</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\LCD;..\HARDWARE\KEY;..\HARDWARE\DCMI;..\HARDWARE\OV2640;..\HARDWARE\TIMER;..\HARDWARE\USART2;..\FWLIB\inc;..\USMART;..\HARDWARE\PWM;..\HARDWARE\OLED</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -438,14 +438,19 @@
               <FilePath>..\HARDWARE\TIMER\timer.c</FilePath>
             </File>
             <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\PWM\pwm.c</FilePath>
+            </File>
+            <File>
               <FileName>ILI93xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\LCD\ILI93xx.c</FilePath>
             </File>
             <File>
-              <FileName>pwm.c</FileName>
+              <FileName>bsp_oled.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HARDWARE\PWM\pwm.c</FilePath>
+              <FilePath>..\HARDWARE\OLED\bsp_oled.c</FilePath>
             </File>
           </Files>
         </Group>

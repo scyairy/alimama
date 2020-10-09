@@ -2799,9 +2799,9 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode)
  	num=num-' ';//得到偏移后的值（ASCII字库是从空格开始取模，所以-' '就是对应字符的字库）
 	for(t=0;t<csize;t++)
 	{   
-		if(size==12)temp=asc2_1206[num][t]; 	 	//调用1206字体
-		else if(size==16)temp=asc2_1608[num][t];	//调用1608字体
-		else if(size==24)temp=asc2_2412[num][t];	//调用2412字体
+		if(size==12)temp=asc2_12062[num][t]; 	 	//调用1206字体
+		else if(size==16)temp=asc2_16082[num][t];	//调用1608字体
+		else if(size==24)temp=asc2_24122[num][t];	//调用2412字体
 		else return;								//没有的字库
 		for(t1=0;t1<8;t1++)
 		{			    

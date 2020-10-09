@@ -25,7 +25,10 @@ void rt_init()
 }
 void rt_main()
 {
-	mlx906();
+	OLED_ShowString(0,0,"ALIENTEK",24);  
+	OLED_ShowString(0,24, "0.96' OLED TEST",16);  
+ 	OLED_ShowString(0,40,"ATOM 2014/5/4",12); 
+	while(1);
 }
 
 void rt_init_thread_entry(void* parameter)

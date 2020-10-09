@@ -39,3 +39,4 @@
 ..\obj\pwm.o: ..\HARDWARE\LED\led.h
 ..\obj\pwm.o: ..\SYSTEM\usart\usart.h
 ..\obj\pwm.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\pwm.o: ..\SYSTEM\delay\delay.h
