@@ -38,4 +38,3 @@
 ..\obj\bsp_oled.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
 ..\obj\bsp_oled.o: F:\MDK5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\obj\bsp_oled.o: ..\HARDWARE\OLED\oledfont.h
-..\obj\bsp_oled.o: ..\SYSTEM\delay\delay.h

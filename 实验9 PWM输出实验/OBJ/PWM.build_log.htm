@@ -1,0 +1,58 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.28.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: shen Windows, HP Inc., LIC=2TT9U-SCYVZ-WHN88-3M9KY-SS44A-ZNYDS
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.28.0.0
+Toolchain Path:  F:\MDK5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.28.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
+Dialog DLL:      TCM.DLL V1.36.2.0
+ 
+<h2>Project:</h2>
+F:\Git\workspace\alimama\实验9 PWM输出实验\USER\PWM.uvprojx
+Project File Date:  10/11/2020
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\MDK5\ARM\ARMCC\Bin'
+Build target 'PWM'
+compiling main.c...
+..\HARDWARE\PWM\pwm.h(21): warning:  #1295-D: Deprecated declaration PWM_RESET - give arg types
+  void PWM_RESET();
+..\HARDWARE\PWM\pwm.h(22): warning:  #1295-D: Deprecated declaration PWM_TEST - give arg types
+  void PWM_TEST();
+..\HARDWARE\USART3\usart3.h(8): warning:  #47-D: incompatible redefinition of macro "USART_REC_LEN"  (declared at line 29 of "..\SYSTEM\usart\usart.h")
+  #define USART_REC_LEN  			2  	//定义最大接收字节数 200
+main.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=13246 RO-data=2498 RW-data=992 ZI-data=1832  
+FromELF: creating hex file...
+"..\OBJ\PWM.axf" - 0 Error(s), 3 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.7.0.pack
+                Keil.STM32F4xx_DFP.2.7.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_PWM
+  F:\MDK5\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>

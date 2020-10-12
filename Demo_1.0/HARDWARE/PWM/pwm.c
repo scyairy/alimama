@@ -73,8 +73,8 @@ void Adjust_PID(int16_t x,int16_t y,float *p)
 	u8 i;
 	float error_x=0,Differ_error_x=0;
 	float error_y=0,Differ_error_y=0;
-    int16_t last_x=105;
-	int16_t last_y=155;
+    int16_t last_x=80;
+	int16_t last_y=60;
 
     float Kpx =0.8,Kpy=0.18;          //±ÈÀýÏµÊý              600_0.1_0_12
 	float Ki = 0.0;

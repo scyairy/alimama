@@ -49,3 +49,4 @@
 ..\obj\main.o: ..\HARDWARE\OV2640\sccb.h
 ..\obj\main.o: ..\HARDWARE\DCMI\dcmi.h
 ..\obj\main.o: ..\HARDWARE\OLED\bsp_oled.h
+..\obj\main.o: ..\HARDWARE\USART3\usart3.h

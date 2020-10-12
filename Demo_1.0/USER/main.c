@@ -11,6 +11,7 @@
 #include "ov2640.h" 
 #include "dcmi.h"
 #include "bsp_oled.h"
+#include "usart3.h"
 //ALIENTEK 探索者STM32F407开发板 实验35
 //摄像头 实验 
 //技术支持：www.openedv.com
@@ -154,7 +155,8 @@ u16 yuv422_y_to_bitmap(u8 threshold,u16 yuv422)
 
 
 int main(void)
-{        
+{  
+			float pp[4];
 //	u8 key=0;
 //	u16 threshold=80;	//二值化时用到的阀值变量   threshold=128   TEST
 	u16 led0pwmval=0;    
@@ -164,6 +166,9 @@ int main(void)
 	delay_init(168);			//延时初始化  
 	uart_init(115200);		//初始化串口波特率为115200 
 	usart2_init(42,115200);		//初始化串口2波特率为115200
+	oled_all(); 
+	oled.show_number(0,1,1,4,12);
+	usart4_init(19200);
 	LED_Init();					//初始化LED 
 
 	KEY_Init();					//按键初始化
@@ -173,35 +178,38 @@ int main(void)
 
 	// POINT_COLOR=RED;//设置字体为红色 
 	// LCD_ShowString(30,10,200,16,16,"Explorer STM32F4");	 
-	while(OV2640_Init())//初始化OV2640
-	{
-			LED0=~LED0;
-		// LCD_ShowString(30,30,240,16,16,"OV2640 ERROR");
-		delay_ms(400);
-	    // LCD_Fill(30,130,239,170,WHITE);
-		// delay_ms(200);
-	} 
+//	while(OV2640_Init())//初始化OV2640
+//	{
+//			LED0=~LED0;
+//		// LCD_ShowString(30,30,240,16,16,"OV2640 ERROR");
+//		delay_ms(400);
+//	    // LCD_Fill(30,130,239,170,WHITE);
+//		// delay_ms(200);
+//	} 
 	// LCD_ShowString(30,30,200,16,16,"OV2640 OK");
 	
 
 		// LCD_Clear(WHITE);
 		// POINT_COLOR=RED; 	
-		MY_DMA_Init();			
-		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMA配置
-	
-		OV2640_OutSize_Set(220,280);//OV2640输出图像尺寸为：176X144
+//		MY_DMA_Init();			
+//		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMA配置
+//	
+//		OV2640_OutSize_Set(220,280);//OV2640输出图像尺寸为：176X144
 		PWM_RESET();
-		oled_init();      		//初始化OLED
-		OLED_Clear();
-		// while (1)
-		// {
-		// 	/* code */
-		// }
+		oled.show_number(0,2,2,4,12);
+		oled.clear();
+	while(1)
+	{
+		
+				LED0=~LED0;
+				oled.show_number(0,6,USART_RX_BUF4[0],4,12);
+				oled.show_number(30,6,USART_RX_BUF4[1],4,12);
+				delay_ms(50);
+				Adjust_PID(USART_RX_BUF4[0],USART_RX_BUF4[1],pp);
+	}
 		// scan();
-		trace();
+
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////		
 	// PWM_down=150;

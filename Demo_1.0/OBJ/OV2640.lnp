@@ -11,6 +11,7 @@
 "..\obj\timer.o"
 "..\obj\pwm.o"
 "..\obj\ili93xx.o"
+"..\obj\usart3.o"
 "..\obj\bsp_oled.o"
 "..\obj\delay.o"
 "..\obj\sys.o"

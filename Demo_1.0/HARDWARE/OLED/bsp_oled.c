@@ -1,11 +1,13 @@
 #include "bsp_oled.h"
 #include "stdlib.h"
 #include "oledfont.h"  	 
-#include "delay.h"
+
+struct OLED_DEVICE oled;
 
 //设置SDA输出
 void SDA_OUT(void)
 {
+    
 	GPIO_InitTypeDef GPIO_InitStructer;
 	GPIO_InitStructer.GPIO_Pin=GPIO_Pin_8;
 	GPIO_InitStructer.GPIO_Mode=GPIO_Mode_OUT;
@@ -59,15 +61,13 @@ void OLED_WR_Byte(unsigned dat,unsigned cmd)
 {
 	
 	if(cmd)
-			{
-
-   Write_IIC_Data(dat);
-   
-		}
-	else {
-   Write_IIC_Command(dat);
-		
-	}
+    {
+        Write_IIC_Data(dat);   
+    }
+	else
+    {
+        Write_IIC_Command(dat);
+    }
 
 
 }
@@ -92,26 +92,10 @@ void fill_picture(unsigned char fill_Data)
 }
 
 
-/***********************Delay****************************************/
-void Delay_50ms(unsigned int Del_50ms)
-{
-	unsigned int m;
-	for(;Del_50ms>0;Del_50ms--)
-		for(m=6245;m>0;m--);
-}
-
-void Delay_1ms(unsigned int Del_1ms)
-{
-	unsigned char j;
-	while(Del_1ms--)
-	{	
-		for(j=0;j<123;j++);
-	}
-}
 
 //坐标设置
 
-	void OLED_Set_Pos(unsigned char x, unsigned char y) 
+void OLED_Set_Pos(unsigned char x, unsigned char y) 
 { 	OLED_WR_Byte(0xb0+y,OLED_CMD);
 	OLED_WR_Byte(((x&0xf0)>>4)|0x10,OLED_CMD);
 	OLED_WR_Byte((x&0x0f),OLED_CMD); 
@@ -185,7 +169,7 @@ u32 oled_pow(u8 m,u8 n)
 	u32 result=1;	 
 	while(n--)result*=m;    
 	return result;
-}				  
+}
 //显示2个数字
 //x,y :起点坐标	 
 //len :数字的位数
@@ -193,7 +177,7 @@ u32 oled_pow(u8 m,u8 n)
 //mode:模式	0,填充模式;1,叠加模式
 //num:数值(0~4294967295);	 		  
 void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size2)
-{         	
+{
 	u8 t,temp;
 	u8 enshow=0;						   
 	for(t=0;t<len;t++)
@@ -224,7 +208,7 @@ void OLED_ShowString(u8 x,u8 y,u8 *chr,u8 Char_Size)
 }
 //显示汉字
 void OLED_ShowCHinese(u8 x,u8 y,u8 no)
-{      			    
+{
 	u8 t,adder=0;
 	OLED_Set_Pos(x,y);	
     for(t=0;t<16;t++)
@@ -261,7 +245,9 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 void oled_init(void)
 { 	
     IIC_Init();
-	Delay_us(200);
+   
+//	Delay_us(200);
+    delay_us(200);
    
 	OLED_WR_Byte(0xAE,OLED_CMD);//--display off
 	
@@ -272,11 +258,9 @@ void oled_init(void)
 	OLED_WR_Byte(0x81,OLED_CMD); // contract control
 	OLED_WR_Byte(0xFF,OLED_CMD);//--128   
 	OLED_WR_Byte(0xA1,OLED_CMD);//set segment remap 
-//	OLED_WR_Byte(0xA0,OLED_CMD);//set segment remap 
 	OLED_WR_Byte(0xA6,OLED_CMD);//--normal / reverse
 	OLED_WR_Byte(0xA8,OLED_CMD);//--set multiplex ratio(1 to 64)
 	OLED_WR_Byte(0x3F,OLED_CMD);//--1/32 duty
-//	OLED_WR_Byte(0xC0,OLED_CMD);//Com scan direction
 	OLED_WR_Byte(0xC8,OLED_CMD);//Com scan direction
 	OLED_WR_Byte(0xD3,OLED_CMD);//-set display offset
 	OLED_WR_Byte(0x00,OLED_CMD);//
@@ -301,7 +285,9 @@ void oled_init(void)
 	OLED_WR_Byte(0x14,OLED_CMD);//
 	OLED_WR_Byte(0xAF,OLED_CMD);//--turn on oled panel
 	 
+     OLED_Clear();
 } 
+
 
 
 /******************************************MYIIC*************************************/
@@ -320,6 +306,7 @@ void IIC_Init(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
   GPIO_Init(GPIOD, &GPIO_InitStructure);//初始化
+    
 	IIC_SCL=1;
 	IIC_SDA=1;
 }
@@ -328,12 +315,12 @@ void IIC_Start(void)
 {
 	SDA_OUT();     //sda线输出
 	IIC_SDA=1;	  	  
-	IIC_SCL=1;	
-	
-	Delay_us(4);
-	
+	IIC_SCL=1;
+	delay_us(4);
+//	Delay_us(4);
  	IIC_SDA=0;//START:when CLK is high,DATA change form high to low 
-	Delay_us(4);
+//	Delay_us(4);
+    delay_us(4);
 	IIC_SCL=0;//钳住I2C总线，准备发送或接收数据 
 }	  
 //产生IIC停止信号
@@ -342,10 +329,12 @@ void IIC_Stop(void)
 	SDA_OUT();//sda线输出
 	IIC_SCL=0;
 	IIC_SDA=0;//STOP:when CLK is high DATA change form low to high
- 	Delay_us(4);
+// 	Delay_us(4);
+    delay_us(4);
 	IIC_SCL=1; 
 	IIC_SDA=1;//发送I2C总线结束信号
-	Delay_us(4);							   	
+//	Delay_us(4);							   	
+    delay_us(4);
 }
 //等待应答信号到来
 //返回值：1，接收应答失败
@@ -354,8 +343,10 @@ u8 IIC_Wait_Ack(void)
 {
 	u8 ucErrTime=0;
 	SDA_IN();      //SDA设置为输入  
-	IIC_SDA=1;Delay_us(1);	   
-	IIC_SCL=1;Delay_us(1);	 
+	IIC_SDA=1;//Delay_us(1);	   
+    delay_us(1);
+	IIC_SCL=1;//Delay_us(1);	 
+    delay_us(1);
 	while(READ_SDA)
 	{
 		ucErrTime++;
@@ -374,9 +365,11 @@ void IIC_Ack(void)
 	IIC_SCL=0;
 	SDA_OUT();
 	IIC_SDA=0;
-	Delay_us(2);
+//	Delay_us(2);
+    delay_us(2);
 	IIC_SCL=1;
-	Delay_us(2);
+//	Delay_us(2);
+    delay_us(2);
 	IIC_SCL=0;
 }
 //不产生ACK应答		    
@@ -385,9 +378,11 @@ void IIC_NAck(void)
 	IIC_SCL=0;
 	SDA_OUT();
 	IIC_SDA=1;
-	Delay_us(2);
+//	Delay_us(2);
+    delay_us(2);
 	IIC_SCL=1;
-	Delay_us(2);
+//	Delay_us(2);
+    delay_us(2);
 	IIC_SCL=0;
 }					 				     
 //IIC发送一个字节
@@ -395,7 +390,7 @@ void IIC_NAck(void)
 //1，有应答
 //0，无应答			  
 void IIC_Send_Byte(u8 txd)
-{                        
+{
     u8 t;   
 	SDA_OUT(); 	    
     IIC_SCL=0;//拉低时钟开始数据传输
@@ -403,11 +398,14 @@ void IIC_Send_Byte(u8 txd)
     {              
         IIC_SDA=(txd&0x80)>>7;
         txd<<=1; 	  
-		Delay_us(2);   //对TEA5767这三个延时都是必须的
+//		Delay_us(2);   //对TEA5767这三个延时都是必须的
+        delay_us(2);
 		IIC_SCL=1;
-		Delay_us(2); 
+//		Delay_us(2); 
+        delay_us(2);
 		IIC_SCL=0;	
-		Delay_us(2);
+//		Delay_us(2);
+        delay_us(2);
     }	 
 } 	    
 //读1个字节，ack=1时，发送ACK，ack=0，发送nACK   
@@ -418,11 +416,13 @@ u8 IIC_Read_Byte(unsigned char ack)
     for(i=0;i<8;i++ )
 	{
         IIC_SCL=0; 
-        Delay_us(2);
+//        Delay_us(2);
+        delay_us(2);
 		IIC_SCL=1;
         receive<<=1;
         if(READ_SDA)receive++;   
-		Delay_us(1); 
+//		Delay_us(1); 
+        delay_us(1);
     }					 
     if (!ack)
         IIC_NAck();//发送nACK
@@ -431,39 +431,28 @@ u8 IIC_Read_Byte(unsigned char ack)
     return receive;
 }
 
-
- void Delay_us(uint16_t n)
+void oled_all(void)
 {
-	uint16_t i = 0;
-	
-	for(i=0; i<n; i++)
-	{
-		__nop(); __nop();  __nop();  __nop();  __nop();
-		__nop(); __nop();  __nop();  __nop();  __nop();
-		__nop(); __nop();  __nop();  __nop();  __nop(); 
-		__nop(); __nop();  __nop();  __nop();  __nop();
-		__nop(); __nop();  __nop();  __nop();  __nop();
-
-	}		
+    oled.init = oled_init;
+    oled.clear = OLED_Clear;
+    oled.show_char = OLED_ShowChar;
+    oled.show_string = OLED_ShowString;
+    oled.show_number = OLED_ShowNum;
+    oled.show_chinese = OLED_ShowCHinese;
+    oled.init();
 }
 
+void oled_show(void)
+{
+		oled.show_string(0,0, "pwm1:",16);
+		oled.show_string(0,2, "pwm2:",16);
+		oled.show_string(0,4, "pwm3:",16);
+		oled.show_string(0,6, "pwm4:",16);
+//		oled.show_number(38,0,53,4,16);
+//		oled.show_number(38,2,53,4,16);
+//		oled.show_number(38,4,53,4,16);
+//		oled.show_number(38,6,53,4,16);
+		oled.show_number(100,0,53,3,16);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
