@@ -2,98 +2,184 @@
 #include "usart3.h"
 #include "delay.h"
 
-unsigned char ucStcAcc1[8],stcGyro1[8],stcAngle1[8];
-unsigned char stcMag1[8],stcGPSV1[8];
-////////////////////////////////////////////////////////////////////////////////// 	 
- 
-u8 USART_RX_BUF4[USART_REC_LEN]={0,0};     //接收缓冲,最大USART_REC_LEN个字节.
-//接收状态
-//bit15，	接收完成标志
-//bit14，	接收到0x0d
-//bit13~0，	接收到的有效字节数目
-u16 USART_RX_STA4=0;  
-//初始化IO 串口4 
-//bound:波特率
+unsigned char data;
+unsigned char ucStctime1[8],ucStcAcc1[8],stcGyro1[8],stcAngle1[8];
+unsigned char stcMag1[8],stcDStatus1[8],stcPress1[8],stcLonLat1[8],stcGPSV1[8];
+
+
+
 void usart4_init(u32 bound)
 {
-   //GPIO端口设置
+   //GPIO???úéè??
   GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE); //使能GPIOC时钟
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);//使能USART4时钟
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE); //ê1?üGPIOCê±?ó
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);//ê1?üUSART4ê±?ó
  
-	//串口1对应引脚复用映射
-	GPIO_PinAFConfig(GPIOC,GPIO_PinSource10,GPIO_AF_UART4); //GPIOC10复用为UART4
-	GPIO_PinAFConfig(GPIOC,GPIO_PinSource11,GPIO_AF_UART4); //GPIOC11复用为UART4
+	//′??ú1??ó|òy???′ó?ó3é?
+	GPIO_PinAFConfig(GPIOC,GPIO_PinSource10,GPIO_AF_UART4); //GPIOC10?′ó??aUART4
+	GPIO_PinAFConfig(GPIOC,GPIO_PinSource11,GPIO_AF_UART4); //GPIOC11?′ó??aUART4
 	
-	//UART4端口配置
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11; //GPIOC10与GPIOC11
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//速度50MHz
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //推挽复用输出
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //上拉
-	GPIO_Init(GPIOC,&GPIO_InitStructure); //初始化Pc10，PC11
+	//UART4???ú????
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11; //GPIOC10ó?GPIOC11
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//?′ó?1|?ü
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//?ù?è50MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //í?íì?′ó?ê?3?
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //é?à-
+	GPIO_Init(GPIOC,&GPIO_InitStructure); //3?ê??ˉPc10￡?PC11
 
-   //UART4初始化设置
-	USART_InitStructure.USART_BaudRate = bound;//波特率设置
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//字长为8位数据格式
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;//一个停止位
-	USART_InitStructure.USART_Parity = USART_Parity_No;//无奇偶校验位
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
-	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;	//收发模式
-  USART_Init(UART4, &USART_InitStructure); //初始化串口1
+   //UART43?ê??ˉéè??
+	USART_InitStructure.USART_BaudRate = bound;//2¨ì??êéè??
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//×?3¤?a8??êy?Y??ê?
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;//ò???í￡?1??
+	USART_InitStructure.USART_Parity = USART_Parity_No;//?T????D￡?é??
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//?Tó2?têy?Yá÷????
+	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;	//ê?·￠?￡ê?
+  USART_Init(UART4, &USART_InitStructure); //3?ê??ˉ′??ú1
 	
-  USART_Cmd(UART4, ENABLE);  //使能串口4 
+  USART_Cmd(UART4, ENABLE);  //ê1?ü′??ú4 
 	
 	USART_ClearFlag(UART4, USART_FLAG_TC);
 	USART_ITConfig(UART4, USART_IT_TXE, DISABLE);
 
-	USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);//开启相关中断
+	USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);//?a???à1??D??
 
-	//Usart4 NVIC 配置
-  NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;//串口1中断通道
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=2;//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority =3;		//子优先级3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器、
+	//Usart4 NVIC ????
+  NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;//′??ú1?D??í¨μà
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=2;//?à??ó??è??3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority =3;		//×óó??è??3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQí¨μàê1?ü
+	NVIC_Init(&NVIC_InitStructure);	//?ù?Y???¨μ?2?êy3?ê??ˉVIC??′??÷?￠
 
 
 	
 }
-u8 Res;
-void UART4_IRQHandler(void)                	//串口4中断服务程序
+
+
+u8 ucRxBuffer[10];
+u8	ucRxCnt1=0;
+void UART4_IRQHandler(void)                	//′??ú4?D??·t??3ìDò
 {
-	static u8 flag=0;
-
-	if(USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	unsigned char data;
+	if(USART_GetITStatus(UART4,USART_IT_RXNE) != RESET)
 	{
+	data = USART_ReceiveData(UART4);
 
-			
-			Res =USART_ReceiveData(UART4);//(USART1->DR);	//读取接收到的数据
-			
-		USART_RX_BUF4[flag]=Res;
-			flag++;
-			if(flag==2)
-				flag=0;
-			
-		
-		//USART_ClearFlag(UART4,USART_IT_RXNE);
+		if(ucRxCnt1<8)
+		{
+			ucRxBuffer[ucRxCnt1++]=data;
+			if(ucRxBuffer[0]!=0x55)
+			{
+				ucRxCnt1 =0;
+			}
+		}
+		CopeSerial2Data1();
 	}
 }	
 
 
-
-
-
-
-
-
-
-
-
-
+void CopeSerial2Data1(void)
+{
+	if(ucRxCnt1>=8)
+	{
+		switch(ucRxBuffer[1])
+		{
+			case 0x50:
+				ucStctime1[0]=ucRxBuffer[2];
+				ucStctime1[1]=ucRxBuffer[3];
+				ucStctime1[2]=ucRxBuffer[4];
+				ucStctime1[3]=ucRxBuffer[5];
+				ucStctime1[4]=ucRxBuffer[6];
+				ucStctime1[5]=ucRxBuffer[7];
+				ucStctime1[6]=ucRxBuffer[8];
+				ucStctime1[7]=ucRxBuffer[9];
+				break;
+			case 0x51:
+				ucStcAcc1[0]=ucRxBuffer[2];
+				ucStcAcc1[1]=ucRxBuffer[3];
+				ucStcAcc1[2]=ucRxBuffer[4];
+				ucStcAcc1[3]=ucRxBuffer[5];
+				ucStcAcc1[4]=ucRxBuffer[6];
+				ucStcAcc1[5]=ucRxBuffer[7];
+				ucStcAcc1[6]=ucRxBuffer[8];
+				ucStcAcc1[7]=ucRxBuffer[9];
+				break;
+			case 0x52:
+				stcGyro1[0]=ucRxBuffer[2];
+				stcGyro1[1]=ucRxBuffer[3];
+				stcGyro1[2]=ucRxBuffer[4];
+				stcGyro1[3]=ucRxBuffer[5];
+				stcGyro1[4]=ucRxBuffer[6];
+				stcGyro1[5]=ucRxBuffer[7];
+				stcGyro1[6]=ucRxBuffer[8];
+				stcGyro1[7]=ucRxBuffer[9];
+				break;
+			case 0x53:
+				stcAngle1[0]=ucRxBuffer[2];
+				stcAngle1[1]=ucRxBuffer[3];
+				stcAngle1[2]=ucRxBuffer[4];
+				stcAngle1[3]=ucRxBuffer[5];
+				stcAngle1[4]=ucRxBuffer[6];
+				stcAngle1[5]=ucRxBuffer[7];
+				stcAngle1[6]=ucRxBuffer[8];
+				stcAngle1[7]=ucRxBuffer[9];
+				break;
+			case 0x54:
+				stcMag1[0]=ucRxBuffer[2];
+				stcMag1[1]=ucRxBuffer[3];
+				stcMag1[2]=ucRxBuffer[4];
+				stcMag1[3]=ucRxBuffer[5];
+				stcMag1[4]=ucRxBuffer[6];
+				stcMag1[5]=ucRxBuffer[7];
+				stcMag1[6]=ucRxBuffer[8];
+				stcMag1[7]=ucRxBuffer[9];
+				break;
+			case 0x55:
+				stcDStatus1[0]=ucRxBuffer[2];
+				stcDStatus1[1]=ucRxBuffer[3];
+				stcDStatus1[2]=ucRxBuffer[4];
+				stcDStatus1[3]=ucRxBuffer[5];
+				stcDStatus1[4]=ucRxBuffer[6];
+				stcDStatus1[5]=ucRxBuffer[7];
+				stcDStatus1[6]=ucRxBuffer[8];
+				stcDStatus1[7]=ucRxBuffer[9];
+				break;
+			case 0x56:
+				stcPress1[0]=ucRxBuffer[2];
+				stcPress1[1]=ucRxBuffer[3];
+				stcPress1[2]=ucRxBuffer[4];
+				stcPress1[3]=ucRxBuffer[5];
+				stcPress1[4]=ucRxBuffer[6];
+				stcPress1[5]=ucRxBuffer[7];
+				stcPress1[6]=ucRxBuffer[8];
+				stcPress1[7]=ucRxBuffer[9];
+				break;
+			case 0x57:
+				stcLonLat1[0]=ucRxBuffer[2];
+				stcLonLat1[1]=ucRxBuffer[3];
+				stcLonLat1[2]=ucRxBuffer[4];
+				stcLonLat1[3]=ucRxBuffer[5];
+				stcLonLat1[4]=ucRxBuffer[6];
+				stcLonLat1[5]=ucRxBuffer[7];
+				stcLonLat1[6]=ucRxBuffer[8];
+				stcLonLat1[7]=ucRxBuffer[9];
+				break;
+			case 0x58:
+				stcGPSV1[0]=ucRxBuffer[2];
+				stcGPSV1[1]=ucRxBuffer[3];
+				stcGPSV1[2]=ucRxBuffer[4];
+				stcGPSV1[3]=ucRxBuffer[5];
+				stcGPSV1[4]=ucRxBuffer[6];
+				stcGPSV1[5]=ucRxBuffer[7];
+				stcGPSV1[6]=ucRxBuffer[8];
+				stcGPSV1[7]=ucRxBuffer[9];
+				break;
+		}
+		ucRxCnt1=0;
+	}
+}
 
 
 

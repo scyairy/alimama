@@ -156,8 +156,8 @@ u16 yuv422_y_to_bitmap(u8 threshold,u16 yuv422)
 
 int main(void)
 {  
-			float pp[4];
-//	u8 key=0;
+	float pp[4];
+	u8 key=0;
 //	u16 threshold=80;	//二值化时用到的阀值变量   threshold=128   TEST
 	u16 led0pwmval=0;    
 	u8 dir=1;
@@ -166,7 +166,7 @@ int main(void)
 	delay_init(168);			//延时初始化  
 	uart_init(115200);		//初始化串口波特率为115200 
 	usart2_init(42,115200);		//初始化串口2波特率为115200
-	oled_all(); 
+	oled_all();
 	oled.show_number(0,1,1,4,12);
 	usart4_init(19200);
 	LED_Init();					//初始化LED 
@@ -174,40 +174,81 @@ int main(void)
 	KEY_Init();					//按键初始化
 	TIM4_PWM_Init(7999,209);//辉
 	
-	// TIM4_PWM_Init(40000-1,42-1);
 
-	// POINT_COLOR=RED;//设置字体为红色 
-	// LCD_ShowString(30,10,200,16,16,"Explorer STM32F4");	 
-//	while(OV2640_Init())//初始化OV2640
-//	{
-//			LED0=~LED0;
-//		// LCD_ShowString(30,30,240,16,16,"OV2640 ERROR");
-//		delay_ms(400);
-//	    // LCD_Fill(30,130,239,170,WHITE);
-//		// delay_ms(200);
-//	} 
-	// LCD_ShowString(30,30,200,16,16,"OV2640 OK");
-	
-
-		// LCD_Clear(WHITE);
-		// POINT_COLOR=RED; 	
-//		MY_DMA_Init();			
-//		DCMI_DMA_Init((u32)&yuv_buf,yuv_buf_size,2,1);//DCMI DMA配置
-//	
-//		OV2640_OutSize_Set(220,280);//OV2640输出图像尺寸为：176X144
 		PWM_RESET();
 		oled.show_number(0,2,2,4,12);
 		oled.clear();
 	while(1)
 	{
-		
-				LED0=~LED0;
-				oled.show_number(0,6,USART_RX_BUF4[0],4,12);
-				oled.show_number(30,6,USART_RX_BUF4[1],4,12);
-				delay_ms(50);
-				Adjust_PID(USART_RX_BUF4[0],USART_RX_BUF4[1],pp);
+//		    if( Usart_State == 2 )
+//        {
+//			/*=======================================================*/
+//								
+//					
+//					
+//					
+//					
+//			/*=======================================================*/
+
+//				    Usart_State = 0;
+//					  Usart_Count = 0;
+//				}		
+//				LED0=~LED0;
+//				oled.show_number(0,6,stcGyro1[0],4,12);
+//				oled.show_number(30,6,stcGyro1[1],4,12);
+//				delay_ms(50);
+				key=KEY_Scan(0);
+				switch(key)
+				{
+					case KEY0_PRES:USART_SendData(UART4, 4);         
+												while(USART_GetFlagStatus(UART4,USART_FLAG_TC)!=SET);
+												break;
+					case KEY1_PRES:USART_SendData(UART4, 2);         
+												while(USART_GetFlagStatus(UART4,USART_FLAG_TC)!=SET);
+												break;		
+					case KEY2_PRES:USART_SendData(UART4, 3);         
+												while(USART_GetFlagStatus(UART4,USART_FLAG_TC)!=SET);
+												break;	
+					case WKUP_PRES:USART_SendData(UART4, 1);         
+												while(USART_GetFlagStatus(UART4,USART_FLAG_TC)!=SET);	
+												break;
+					default: delay_ms(200);				
+				}
+				
+				if (ucRxBuffer[1]==0x53)
+				{
+					LED0=~LED0;
+					oled.show_string(0,0,"color:",16);
+					oled.show_string(0,2,"object:",16);
+					oled.show_string(0,4,"dis:",16);
+					if(stcAngle1[0]==5) oled.show_string(56,0,"red",16);
+					else if(stcAngle1[0]==6) oled.show_string(56,0,"green",16);	
+					else oled.show_string(56,0,"blue",16);
+					if(stcAngle1[1]==8) oled.show_string(64,2,"squre",16);
+					else if(stcAngle1[1]==9) oled.show_string(64,2,"circle",16);
+					else oled.show_string(64,2,"triangle",16);
+					delay_ms(2000);
+					oled.clear();
+				}
+				if (ucRxBuffer[1]==0x52)
+				{
+					
+					Adjust_PID(stcGyro1[0],stcGyro1[1],pp);
+					oled.show_string(0,0,"center_x:",16);
+					oled.show_string(0,2,"center_y:",16);
+					oled.show_number(70,0,stcGyro1[0],2,16);
+					oled.show_number(70,2,stcGyro1[1],2,16);
+				}
+				
+				
+				
+				
+
 	}
 		// scan();
+	
+	
+	
 
 }
 

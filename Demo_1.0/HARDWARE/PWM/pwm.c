@@ -73,24 +73,24 @@ void Adjust_PID(int16_t x,int16_t y,float *p)
 	u8 i;
 	float error_x=0,Differ_error_x=0;
 	float error_y=0,Differ_error_y=0;
-    int16_t last_x=80;
-	int16_t last_y=60;
+   float last_x=69;//
+	float last_y=66.8;//+上
 
-    float Kpx =0.8,Kpy=0.18;          //比例系数              600_0.1_0_12
+    float Kpx =0.8,Kpy=0.14;          //比例系数              600_0.1_0_12
 	float Ki = 0.0;
-    float Kd =0.04;		 //积分系数，微分系数
+    float Kdx =0.03,Kdy=0.02;		 //积分系数，微分系数
 
 
 			if(x<last_x)
 			{
 				error_x=last_x-x;
 				if(error_x> 50)	error_x= 50;
-				if(error_x> 10)	
+				if(error_x> 1)	
 				{
 					if(error_x<Last_error_x)
-					PWM_down = (PWM_down+(error_x*Kpx+Integral_error_x*Ki-(Last_error_x-error_x)*Kd));
+					PWM_down = (PWM_down+(error_x*Kpx+Integral_error_x*Ki-(Last_error_x-error_x)*Kdx));
 					else
-					PWM_down = (PWM_down+(error_x*Kpx+Integral_error_x*Ki+(error_x-Last_error_x)*Kd));
+					PWM_down = (PWM_down+(error_x*Kpx+Integral_error_x*Ki+(error_x-Last_error_x)*Kdx));
 					
 				}
 			}
@@ -98,13 +98,13 @@ void Adjust_PID(int16_t x,int16_t y,float *p)
 			{
 				error_x=x-last_x;
 				if(error_x> 50)	error_x= 50;
-				if(error_x> 10)	
+				if(error_x> 1)	
 				{
 					
 					if(error_x<Last_error_x)
-					PWM_down = (PWM_down-(error_x*Kpx+Integral_error_x*Ki-(Last_error_x-error_x)*Kd));
+					PWM_down = (PWM_down-(error_x*Kpx+Integral_error_x*Ki-(Last_error_x-error_x)*Kdx));
 					else
-					PWM_down = (PWM_down-(error_x*Kpx+Integral_error_x*Ki+(error_x-Last_error_x)*Kd));
+					PWM_down = (PWM_down-(error_x*Kpx+Integral_error_x*Ki+(error_x-Last_error_x)*Kdx));
 
 				}
 			}
@@ -113,13 +113,13 @@ void Adjust_PID(int16_t x,int16_t y,float *p)
 			{
 				error_y=last_y-y;
 				if(error_y> 50)	error_y= 50;
-				if(error_y> 10)
+				if(error_y> 1)
 				{
 					
 					if(error_x<Last_error_x)
-					PWM_up = (PWM_up-(error_y*Kpy+Integral_error_y*Ki-(Last_error_y-error_y)*Kd));
+					PWM_up = (PWM_up-(error_y*Kpy+Integral_error_y*Ki-(Last_error_y-error_y)*Kdy));
 					else
-					PWM_up = (PWM_up-(error_y*Kpy+Integral_error_y*Ki+(error_y-Last_error_y)*Kd));
+					PWM_up = (PWM_up-(error_y*Kpy+Integral_error_y*Ki+(error_y-Last_error_y)*Kdy));
 					
 				}
 			}
@@ -127,12 +127,12 @@ void Adjust_PID(int16_t x,int16_t y,float *p)
 			{
 				error_y=y-last_y;
 				if(error_y> 50)	error_y= 50;
-				if(error_y> 10)
+				if(error_y> 1)
 				{
 					if(error_x<Last_error_x)
-					PWM_up = (PWM_up+(error_y*Kpy+Integral_error_y*Ki-(Last_error_y-error_y)*Kd));
+					PWM_up = (PWM_up+(error_y*Kpy+Integral_error_y*Ki-(Last_error_y-error_y)*Kdy));
 					else
-					PWM_up = (PWM_up+(error_y*Kpy+Integral_error_y*Ki+(error_y-Last_error_y)*Kd));
+					PWM_up = (PWM_up+(error_y*Kpy+Integral_error_y*Ki+(error_y-Last_error_y)*Kdy));
 				}
 			}
 
@@ -288,7 +288,7 @@ void PWM_TEST()
 void PWM_RESET()
 {
 		PWM_down=760;
-		PWM_up=400;
+		PWM_up=380;
 		delay_ms(500);
 }
 
