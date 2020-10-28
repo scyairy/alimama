@@ -220,7 +220,7 @@ int main(void)
 					default: delay_ms(200);				
 				}
 				
-				if (ucRxBuffer[1]==0x53)
+				if (ucRxBuffer[1]==0x53)	//形状、颜色、距离、边长
 				{
 
 					oled.show_string(0,0,"color:",16);
@@ -266,7 +266,7 @@ int main(void)
 						GPIO_ResetBits(GPIOB,GPIO_Pin_9);
 					}
 				}
-				else if (ucRxBuffer[1]==0x52)
+				else if (ucRxBuffer[1]==0x52)//颜色跟踪显示
 				{
 					Adjust_PID(stcGyro1[0],stcGyro1[1],pp);
 					oled.show_string(0,0,"center_x:",16);
@@ -283,7 +283,7 @@ int main(void)
 ////					}
 					
 				}
-				else if (ucRxBuffer[1]==0x51)
+				else if (ucRxBuffer[1]==0x51)//球体识别
 				{
 					delay_ms(200);
 					oled.clear();
@@ -305,7 +305,8 @@ int main(void)
 					else if(ucStcAcc1[2]==2) oled.show_string(50,4,"football",16);
 					else oled.show_string(50,4,"football",16);
 					
-					if(ucStcAcc1[3]==1)
+					if(ucStcAcc1[3]==1)//声光报警
+				
 					{
 							LED0=0;
 							GPIO_SetBits(GPIOB,GPIO_Pin_9);
