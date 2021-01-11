@@ -314,110 +314,11 @@ void RobotRun_Operation(void)	//读取各个灰度值
 	
 }
 
-//void GrayFront_Operation(void)		//前灰度操作改ing
-//{
-//	static uint8_t flag = 0;
-//    static int16_t* color = F_White;
-//	rt_int16_t H_SETPOINT=0;
-//	OLED_Clear();
-//	OLED_ShowString(0,0,"white:",12);
-//	while(1)
-//	{
-//		Get_FGrayscale(color);
-//		Show_Grayscale(color);
-//		if (rt_mb_recv(key_value_mb, &keycode, 5) == RT_EOK)
-//		{
-//			if(flag == 0)
-//			{
-//				if(keycode == KEY_VALUE_ENSURE)
-//				{
-//				    OLED_ShowString(0,0,"green:",12);
-//					flag = 1 ;
-//					color = F_Green;
-//				}
-//				else if(keycode == KEY_VALUE_CANCEL)
-//				{
-//					Frame = Gray_Front ;
-//					break;
-//				}
-//			}
-//			else if(flag == 1)
-//			{
-//				if(keycode == KEY_VALUE_ENSURE)
-//				{
-//					OLED_ShowString(0,0,"black:",12);		
-//					color = F_Black;
-//					flag = 2;
-//				}
-//				else if(keycode == KEY_VALUE_CANCEL)
-//				{
-//					Frame = Gray_Front ;
-//					break;
-//				}
-//			}
-//			else if(flag == 2)
-//			{				 		
-//				if(keycode == KEY_VALUE_ENSURE)
-//				{
-//          /*flash 储存 average of white-green*/
-//          /*flash 储存 average of white-black*/
-//					/*flash 储存 average of green-black*/
-//					OLED_ShowString(0,0,"MidGraycale:",12);	
-//					SaveSystemParam(F_Grayscale);
-//					
-
-//					flag = 3;
-//				}
-//				else if(keycode == KEY_VALUE_CANCEL)
-//				{
-//					Frame = Gray_Front ;
-//					break;
-//				}
-//			}
-//			else if(flag == 3)
-//			{
-
-//				if(keycode == KEY_VALUE_ENSURE)
-//				{
-
-//					color = Mid_Grayscle;
-//					SaveSystemParam(M_Grayscale);	
-//		OLED_ShowString(0,6,"H_SETPOINT:",12);
-//		H_SETPOINT=Get_H_SETPOINT();
-//		OLED_ShowNum(0,7,H_SETPOINT,4,12);					
-////					OLED_ShowString(0,6,"save completed:",12);					
-//				}					
-//				if (rt_mb_recv(key_value_mb, &keycode, RT_WAITING_FOREVER) == RT_EOK)
-//					{
-//						if(keycode == KEY_VALUE_CANCEL)
-//						{
-//							flag = 0;
-//							color = F_White;
-//							Frame = Gray_Front ;
-//							break;
-//						}
-//						break;
-//					}
-//					
-//				
-//				else if(keycode == KEY_VALUE_CANCEL)
-//				{
-//					flag = 0;
-//					color = F_White;					
-//					Frame = Gray_Front ;
-//					break;
-//				}
-//			}
-//		}
-//	}
-	
-//}
-
-void GrayFront_Operation(void)		//前灰度操作
+void GrayFront_Operation(void)		//前灰度操作改ing
 {
 	static uint8_t flag = 0;
-    static int16_t* color = F_White;
-	
+   static int16_t* color = F_White;
+	rt_int16_t H_SETPOINT=0;
 	OLED_Clear();
 	OLED_ShowString(0,0,"white:",12);
 	while(1)
@@ -458,13 +359,35 @@ void GrayFront_Operation(void)		//前灰度操作
 			{				 		
 				if(keycode == KEY_VALUE_ENSURE)
 				{
-           /*flash 储存 average of white-green*/
-          /*flash 储存 average of white-black*/
+         /*flash 储存 average of white-green*/
+         /*flash 储存 average of white-black*/
 					/*flash 储存 average of green-black*/
+					OLED_ShowString(0,0,"MidGraycale:",12);	
+//					SaveSystemParam(F_Grayscale);
 					
-					SaveSystemParam(F_Grayscale);
-					OLED_ShowString(0,6,"save completed:",12);	
-					if (rt_mb_recv(key_value_mb, &keycode, RT_WAITING_FOREVER) == RT_EOK)
+
+					flag = 3;
+				}
+				else if(keycode == KEY_VALUE_CANCEL)
+				{
+					Frame = Gray_Front ;
+					break;
+				}
+			}
+			else if(flag == 3)
+			{
+
+				if(keycode == KEY_VALUE_ENSURE)
+				{
+
+					color = Mid_Grayscle;
+					SaveSystemParam(M_Grayscale);	
+		OLED_ShowString(0,6,"H_SETPOINT:",12);
+		H_SETPOINT=Get_H_SETPOINT();
+		OLED_ShowNum(0,7,H_SETPOINT,4,12);					
+//					OLED_ShowString(0,6,"save completed:",12);					
+				}					
+				if (rt_mb_recv(key_value_mb, &keycode, RT_WAITING_FOREVER) == RT_EOK)
 					{
 						if(keycode == KEY_VALUE_CANCEL)
 						{
@@ -473,9 +396,10 @@ void GrayFront_Operation(void)		//前灰度操作
 							Frame = Gray_Front ;
 							break;
 						}
+						break;
 					}
 					
-				}
+				
 				else if(keycode == KEY_VALUE_CANCEL)
 				{
 					flag = 0;
@@ -486,8 +410,84 @@ void GrayFront_Operation(void)		//前灰度操作
 			}
 		}
 	}
-
+	
 }
+
+// void GrayFront_Operation(void)		//前灰度操作
+// {
+// 	static uint8_t flag = 0;
+//     static int16_t* color = F_White;
+	
+// 	OLED_Clear();
+// 	OLED_ShowString(0,0,"white:",12);
+// 	while(1)
+// 	{
+// 		Get_FGrayscale(color);
+// 		Show_Grayscale(color);
+// 		if (rt_mb_recv(key_value_mb, &keycode, 5) == RT_EOK)
+// 		{
+// 			if(flag == 0)
+// 			{
+// 				if(keycode == KEY_VALUE_ENSURE)
+// 				{
+// 				    OLED_ShowString(0,0,"green:",12);
+// 					flag = 1 ;
+// 					color = F_Green;
+// 				}
+// 				else if(keycode == KEY_VALUE_CANCEL)
+// 				{
+// 					Frame = Gray_Front ;
+// 					break;
+// 				}
+// 			}
+// 			else if(flag == 1)
+// 			{
+// 				if(keycode == KEY_VALUE_ENSURE)
+// 				{
+// 					OLED_ShowString(0,0,"black:",12);		
+// 					color = F_Black;
+// 					flag = 2;
+// 				}
+// 				else if(keycode == KEY_VALUE_CANCEL)
+// 				{
+// 					Frame = Gray_Front ;
+// 					break;
+// 				}
+// 			}
+// 			else if(flag == 2)
+// 			{				 		
+// 				if(keycode == KEY_VALUE_ENSURE)
+// 				{
+//            /*flash 储存 average of white-green*/
+//           /*flash 储存 average of white-black*/
+// 					/*flash 储存 average of green-black*/
+					
+// 					SaveSystemParam(F_Grayscale);
+// 					OLED_ShowString(0,6,"save completed:",12);	
+// 					if (rt_mb_recv(key_value_mb, &keycode, RT_WAITING_FOREVER) == RT_EOK)
+// 					{
+// 						if(keycode == KEY_VALUE_CANCEL)
+// 						{
+// 							flag = 0;
+// 							color = F_White;
+// 							Frame = Gray_Front ;
+// 							break;
+// 						}
+// 					}
+					
+// 				}
+// 				else if(keycode == KEY_VALUE_CANCEL)
+// 				{
+// 					flag = 0;
+// 					color = F_White;					
+// 					Frame = Gray_Front ;
+// 					break;
+// 				}
+// 			}
+// 		}
+// 	}
+
+// }
 
 
 //void GrayBack_Operation(void)			//后灰度操作改ing

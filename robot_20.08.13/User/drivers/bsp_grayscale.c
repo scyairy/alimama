@@ -241,38 +241,39 @@ int HD(uint8_t i,uint8_t j)
 void Get_FGrayscale(int16_t* grayscale)
 {
 
+	uint8_t i=0;//循环计数器	
+
 //1
 		A=1;B=1;C=1;
 		grayscale[7]=Get_Adc_Average(12,3);//获取通道5的转换值，3次取平
-		
-//     5
+//    5
 		A=0;B=1;C=1;
-		grayscale[6]=Get_Adc_Average(12,3);
-		
+		grayscale[6]=Get_Adc_Average(12,3);		
 //		2
 		A=1;B=0;C=1;
-		grayscale[5]=Get_Adc_Average(12,3);
-		
+		grayscale[5]=Get_Adc_Average(12,3);		
 //		6
 		A=0;B=0;C=1;
-		grayscale[4]=Get_Adc_Average(12,3);
-		
+		grayscale[4]=Get_Adc_Average(12,3);		
 //		3
 		A=1;B=1;C=0;
-		grayscale[3]=Get_Adc_Average(12,3);
-		
+		grayscale[3]=Get_Adc_Average(12,3);		
 //		7
 		A=0;B=1;C=0;
-		grayscale[2]=Get_Adc_Average(12,3);
-		
+		grayscale[2]=Get_Adc_Average(12,3);		
 //		4
 		A=1;B=0;C=0;
-		grayscale[1]=Get_Adc_Average(12,3);
-		
+		grayscale[1]=Get_Adc_Average(12,3);		
 //		8
 		A=0;B=0;C=0;
 		grayscale[0]=Get_Adc_Average(12,3);
 		
+		for ( i = 0; i<8; i++) 
+	{
+		Mid_Grayscle[i]=grayscale[i];
+	}
+
+	
 }
 
 void Get_BGrayscale(int16_t* grayscale)
@@ -334,7 +335,7 @@ int16_t pre_calculate()//计算偏移量
 	int All_Result = 0;    //处理过后的灰度总和
 	int Finall_Result = 0; //最终处理值
 	uint8_t i;//循环计数器
-//	H_SETPOINT=Get_H_SETPOINT();
+	H_SETPOINT=Get_H_SETPOINT();
 	Get_FGrayscale(grayscale);
 	
 	for ( i = 0; i<8; i++) 
@@ -357,8 +358,8 @@ int16_t Get_H_SETPOINT()
 	uint8_t i;//循环计数器	
 	for ( i = 0; i<8; i++) 
 	{
-		All_Channel = All_Channel+BackGrayscale[i];
-		All_Result  = All_Result+(BackGrayscale[i]*(i+1));
+		All_Channel = All_Channel+Mid_Grayscle[i];
+		All_Result  = All_Result+(Mid_Grayscle[i]*(i+1));
 
 	}
     Finall_Result = All_Result*1000/All_Channel;

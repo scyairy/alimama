@@ -285,7 +285,7 @@ void SaveSystemParam(uint8_t type)
 					MidGrayscale[i]=Mid_Grayscle[i];
 				}
 				Flash_EraseSector(FLASH_Sector_11);
-				Flash_Write16BitDatas(MidGrayscaleAddr, 8, MidGrayscale);				
+				Flash_Write16BitDatas(MidGrayscaleAddr, 24, MidGrayscale);				
 			
         default:
              break;			

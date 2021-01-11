@@ -26,7 +26,7 @@ void ForwardTrack_PID1(rt_int16_t speed)
 
 			error=pre_calculate();
 				
-				rt_kprintf("error:%d",error);
+			rt_kprintf("error:%d",error);
 				
 			Integral_error += error;
 			
