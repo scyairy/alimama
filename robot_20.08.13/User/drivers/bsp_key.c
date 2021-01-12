@@ -7,17 +7,20 @@
 #define printf(...)                     /*ÎÞÊä³ö*/
 #endif
 
-#define KEY_RCC	            RCC_AHB1Periph_GPIOG
-#define KEY_PORT	        GPIOG
-#define KEY_ENSURE_PIN	    GPIO_Pin_13
+#define KEY_RCCC	            RCC_AHB1Periph_GPIOC
+#define KEY_RCCA	            RCC_AHB1Periph_GPIOA
+#define KEY_PORTC	        GPIOC
+#define KEY_PORTA	        GPIOA
+#define KEY_ENSURE_PIN	    GPIO_Pin_12
 #define KEY_CANCEL_PIN	    GPIO_Pin_10
-#define KEY_UP_PIN	        GPIO_Pin_12
-#define KEY_DOWN_PIN	    GPIO_Pin_11
+#define KEY_UP_PIN	        GPIO_Pin_11
+#define KEY_DOWN_PIN	    GPIO_Pin_15
 
 
 
 
 #define KEY_ALL_NSET		(0x0000|KEY_CANCEL_PIN|KEY_ENSURE_PIN|KEY_UP_PIN|KEY_DOWN_PIN)
+#define KEY_OTHER		    (0x0000|KEY_ENSURE_PIN|KEY_UP_PIN|KEY_DOWN_PIN)
 
 static void key_scan(void);
 
@@ -37,14 +40,16 @@ void key_init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(KEY_RCC, ENABLE);
+  RCC_AHB1PeriphClockCmd(KEY_RCCC|KEY_RCCA, ENABLE);
  
   GPIO_InitStructure.GPIO_Pin = KEY_ENSURE_PIN|KEY_CANCEL_PIN|KEY_UP_PIN|KEY_DOWN_PIN; 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	
-  GPIO_Init(KEY_PORT, &GPIO_InitStructure);
+  GPIO_Init(KEY_PORTA, &GPIO_InitStructure);
+  GPIO_InitStructure.GPIO_Pin = KEY_CANCEL_PIN;
+  GPIO_Init(KEY_PORTC, &GPIO_InitStructure);
 }
 
 void key_scan(void)
@@ -53,7 +58,7 @@ void key_scan(void)
     static vu8 s_key_debounce_count, s_key_long_count;
     vu16	t_key_code;
 
-    t_key_code = GPIO_ReadInputData(KEY_PORT) & KEY_ALL_NSET;
+    t_key_code = (GPIO_ReadInputData(KEY_PORTA) & KEY_OTHER)|(GPIO_ReadInputData(KEY_PORTC) & KEY_CANCEL_PIN);
 
     if((t_key_code == KEY_ALL_NSET)||(t_key_code != s_KeyCode))
     {

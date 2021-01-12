@@ -14,22 +14,22 @@ void USART3_Init(void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure; 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE); //使能GPIOA时钟
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE); //使能GPIOA时钟
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);//使能USART1时钟
 	
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_USART3);
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource11,GPIO_AF_USART3);
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_USART3);
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_USART3);
 	
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_10 | GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_2 | GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB,&GPIO_InitStructure);
 	
 	USART_InitStructure.USART_BaudRate=115200;
 	USART_InitStructure.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode=USART_Mode_Rx | USART_Mode_Tx;
+	USART_InitStructure.USART_Mode=USART_Mode_Tx | USART_Mode_Rx;
 	USART_InitStructure.USART_Parity=USART_Parity_No;
 	USART_InitStructure.USART_StopBits=USART_StopBits_1;
 	USART_InitStructure.USART_WordLength=USART_WordLength_8b;

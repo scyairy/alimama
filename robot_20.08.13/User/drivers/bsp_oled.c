@@ -8,23 +8,23 @@
 void SDA_OUT(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructer;
-	GPIO_InitStructer.GPIO_Pin=GPIO_Pin_8;
+	GPIO_InitStructer.GPIO_Pin=GPIO_Pin_7;
 	GPIO_InitStructer.GPIO_Mode=GPIO_Mode_OUT;
 	GPIO_InitStructer.GPIO_PuPd=GPIO_PuPd_UP;
 	GPIO_InitStructer.GPIO_OType=GPIO_OType_PP;
 	GPIO_InitStructer.GPIO_Speed=GPIO_Speed_100MHz;
-	GPIO_Init(GPIOD, &GPIO_InitStructer);
+	GPIO_Init(GPIOB, &GPIO_InitStructer);
 }
 
 //设置SDA输入
 void SDA_IN(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructer;
-	GPIO_InitStructer.GPIO_Pin=GPIO_Pin_8;
+	GPIO_InitStructer.GPIO_Pin=GPIO_Pin_7;
 	GPIO_InitStructer.GPIO_Mode=GPIO_Mode_IN;
 	GPIO_InitStructer.GPIO_PuPd=GPIO_PuPd_UP;
 	GPIO_InitStructer.GPIO_Speed=GPIO_Speed_100MHz;
-	GPIO_Init(GPIOD, &GPIO_InitStructer);
+	GPIO_Init(GPIOB, &GPIO_InitStructer);
 }
 
 
@@ -312,15 +312,15 @@ void IIC_Init(void)
 {			
   GPIO_InitTypeDef  GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);//使能GPIOB时钟
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能GPIOB时钟
 
   //GPIOB8,B9初始化设置
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-  GPIO_Init(GPIOD, &GPIO_InitStructure);//初始化
+  GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
 	IIC_SCL=1;
 	IIC_SDA=1;
 }

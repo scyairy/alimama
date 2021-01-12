@@ -7,17 +7,16 @@
 static void Dir_Init(void)
 {
    GPIO_InitTypeDef  GPIO_InitStructure;
-   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);         //使能GPIOF时钟
+   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);         //使能GPIOF时钟
 
    //初始化设置
-   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1;
+   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 |GPIO_Pin_5;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;                  //普通输出模式
    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                 //推挽输出
    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;             //100MHz
    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                   //上拉
-   GPIO_Init(GPIOA, &GPIO_InitStructure);                         //初始化
+   GPIO_Init(GPIOD, &GPIO_InitStructure);                         //初始化
  	
-//   GPIO_SetBits(GPIOA,GPIO_Pin_0 |GPIO_Pin_1);
 }
 
 //电机PWM初始化 
@@ -31,10 +30,10 @@ static void PWM_Init(uint16_t arr,uint16_t psc)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);  	      //TIM10时钟使能
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE); 	      //使能PORTF时钟	
 	
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource0,GPIO_AF_TIM3);         //GPIOF6复用为定时器10
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource1,GPIO_AF_TIM3);       //GPIOF7复用为定时器11
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_TIM3);         //GPIOF6复用为定时器10
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_TIM3);       //GPIOF7复用为定时器11
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;           //GPIOF6
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_5;           //GPIOF6
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;                   //复用功能
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	           //速度100MHz
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                 //推挽复用输出
@@ -155,10 +154,10 @@ void motor_stop(void)
 */
 void mot(int16_t Speed_Left,int16_t Speed_Right)
 {
-	if(Speed_Left>=0&&Speed_Right>=0)motor(0,Speed_Left,0,Speed_Right);
-	if(Speed_Left<0&&Speed_Right>0)motor(1,-Speed_Left,0,Speed_Right);
-	if(Speed_Left<0&&Speed_Right<0)motor(1,-Speed_Left,1,-Speed_Right);
-	if(Speed_Left>0&&Speed_Right<0)motor(0,Speed_Left,1,-Speed_Right);
+	if(Speed_Left>=0&&Speed_Right>=0)motor(1,Speed_Left,1,Speed_Right);
+	if(Speed_Left<0&&Speed_Right>0)motor(0,-Speed_Left,1,Speed_Right);
+	if(Speed_Left<0&&Speed_Right<0)motor(0,-Speed_Left,0,-Speed_Right);
+	if(Speed_Left>0&&Speed_Right<0)motor(1,Speed_Left,0,-Speed_Right);
 }
 
 void turn_angle(int ang,int speed)

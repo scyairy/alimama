@@ -3,8 +3,8 @@
 #include "sys.h" 
 #include <rtthread.h>
 
-#define Motor_Right_DIR PAout(1)
-#define Motor_Left_DIR PAout(0)
+#define Motor_Right_DIR PDout(5)
+#define Motor_Left_DIR PDout(4)
 #define Motor_Right_PWM TIM3->CCR4
 #define Motor_Left_PWM TIM3->CCR3 
 

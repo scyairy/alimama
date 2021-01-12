@@ -5,12 +5,12 @@
 
 
 //CD4051¶Ë¿Ú¶¨Òå
-#define A PFout(4)	
-#define B PFout(5)		 
-#define C PFout(6)
-#define D PFout(7)
-#define E PFout(8)
-#define F PFout(9)
+#define A PGout(10)	
+#define B PGout(11)		 
+#define C PGout(12)
+#define D PEout(7)
+#define E PEout(8)
+#define F PGout(1)
 
 #define hd1 HD(1,1)
 #define hd2 HD(1,2)

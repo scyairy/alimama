@@ -20,9 +20,9 @@
 //#define SDA_IN()  {GPIOD->MODER&=~(3<<(9*2));GPIOB->MODER|=0<<9*2;}	
 //#define SDA_OUT() {GPIOD->MODER&=~(3<<(9*2));GPIOB->MODER|=1<<9*2;} 
 //IO²Ù×÷º¯Êý	 
-#define IIC_SCL    PDout(9) //SCL
-#define IIC_SDA    PDout(8) //SDA	 
-#define READ_SDA   PDin(8)  //ÊäÈëSDA 
+#define IIC_SCL    PBout(6) //SCL
+#define IIC_SDA    PBout(7) //SDA	 
+#define READ_SDA   PBin(7)  //ÊäÈëSDA 
 
  		     
 #define OLED_CMD  0	//Ð´ÃüÁî

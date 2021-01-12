@@ -1636,7 +1636,7 @@ void PID_Laser_L_1point(u16 speed)
     while(1)
 			{
 				
-				if(laser_l)break;
+				if(!laser_l)break;
 							error=pre_calculate();
 				
 						rt_kprintf("error:%d",error);
@@ -1686,7 +1686,7 @@ void PID_Laser_R_1point(u16 speed)
     while(1)
 			{
 				
-				if(laser_r)break;
+				if(!laser_r)break;
 							error=pre_calculate();
 				
 						rt_kprintf("error:%d",error);

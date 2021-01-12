@@ -3,16 +3,21 @@
 #include "bsp_oled.h"
 
 
-#define GrayscaleControl_RCC	            RCC_AHB1Periph_GPIOF
-#define GrayscaleControl_PORT	            GPIOF
-#define A0_PIN	    GPIO_Pin_4
-#define A1_PIN	    GPIO_Pin_5
-#define A2_PIN	    GPIO_Pin_6
+#define GrayscaleControl_RCCG	            RCC_AHB1Periph_GPIOG
+#define GrayscaleControl_RCCE	            RCC_AHB1Periph_GPIOE
+
+#define GrayscaleControl_PORTE	            GPIOE
+#define GrayscaleControl_PORTG	            GPIOG
+
+#define A0_PIN	    GPIO_Pin_10
+#define A1_PIN	    GPIO_Pin_11
+#define A2_PIN	    GPIO_Pin_12
 #define B0_PIN	    GPIO_Pin_7
 #define B1_PIN	    GPIO_Pin_8
-#define B2_PIN	    GPIO_Pin_9
+#define B2_PIN	    GPIO_Pin_1
 
-#define GrayscaleControl_PIN  (A0_PIN|A1_PIN|A2_PIN|B0_PIN|B1_PIN|B2_PIN)
+#define GrayscaleControl_PING  (A0_PIN|A1_PIN|A2_PIN|B2_PIN)
+#define GrayscaleControl_PINE  (B0_PIN|B1_PIN)
 
 
 
@@ -133,27 +138,34 @@ void grayscale_init(void)
     GPIO_InitTypeDef  GPIO_InitStructure;
 	ADC_CommonInitTypeDef ADC_CommonInitStructure;
 	ADC_InitTypeDef       ADC_InitStructure;
-    RCC_AHB1PeriphClockCmd(GrayscaleControl_RCC, ENABLE);
 
-    GPIO_InitStructure.GPIO_Pin =  GrayscaleControl_PIN;
+    RCC_AHB1PeriphClockCmd(GrayscaleControl_RCCG|GrayscaleControl_RCCE, ENABLE);
+
+    GPIO_InitStructure.GPIO_Pin =  GrayscaleControl_PING;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_Init(GrayscaleControl_PORT, &GPIO_InitStructure);
+    GPIO_Init(GrayscaleControl_PORTG, &GPIO_InitStructure);
 
+	GPIO_InitStructure.GPIO_Pin =  GrayscaleControl_PINE;
+	GPIO_Init(GrayscaleControl_PORTE, &GPIO_InitStructure);
 
 	
     //初始化灰度传感器的ADC
 	//前灰度:PC2 
 	//后灰度:PC3
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//使能GPIOA时钟
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);//使能GPIOA时钟
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能GPIOB时钟
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE); //使能ADC1时钟
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3;            
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;	           
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;         //模拟输入
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;    //不带上下拉
-    GPIO_Init(GPIOC, &GPIO_InitStructure);               //初始化  
+    GPIO_Init(GPIOA, &GPIO_InitStructure);               //初始化
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化	  
  
 	RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);  //ADC1复位
 	RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE); //复位结束	 
